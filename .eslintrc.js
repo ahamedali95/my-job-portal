@@ -1,13 +1,15 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
+    es2022: true,
     jest: true
   },
   parser: "@typescript-eslint/parser",
   plugins: [
     "react",
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "jest",
+    "react-hooks"
   ],
   extends: [
     "eslint:recommended",
@@ -17,10 +19,11 @@ module.exports = {
     "plugin:react-hooks/recommended"
   ],
   parserOptions: {
-    ecmaVersion: 11,
+    ecmaVersion: 12,
     ecmaFeatures: {
       jsx: true
     },
+    sourceType: "module"
   },
   settings: {
     react: {

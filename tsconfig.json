@@ -14,9 +14,11 @@
     "isolatedModules": true,
     "jsx": "react",
     "declaration": true,
-    "outDir": "./dist",
+    "emitDeclarationOnly": true,
+    "outDir": "ts-output",
     "moduleResolution": "node",
-    "module": "esnext"
+    "module": "esnext",
+    "resolveJsonModule": true
   },
   "include": [
     "src"
@@ -24,7 +26,6 @@
   "exclude": [
     "node_modules",
     "src/__tests__",
-    "jest-setup.ts",
     "src/__mocks__"
   ]
 }
