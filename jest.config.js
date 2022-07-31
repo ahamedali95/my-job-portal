@@ -39,9 +39,8 @@ module.exports = {
     "@assets": "assets"
   },
   moduleDirectories: ["node_modules", "src"],
-  rootDir: "src",
   setupFilesAfterEnv: [
-    "./jest-setup.js"
+    "./jest.setup.js"
   ],
   verbose: true
 };
