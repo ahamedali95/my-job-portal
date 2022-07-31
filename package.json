@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/index.html",
-  "engines": {
-    "npm": ">=7.19.1",
-    "node": ">=16.6.0"
-  },
   "scripts": {
     "check:typings": "tsc",
     "generate:doc": "typedoc src",
