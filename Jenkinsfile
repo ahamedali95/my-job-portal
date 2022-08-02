@@ -18,7 +18,7 @@ pipeline {
             }
             post {
                 always {
-                   archiveArtifacts artifacts: 'workspace'
+                   archiveArtifacts artifacts: '/usr'
                 }
             }
         }
