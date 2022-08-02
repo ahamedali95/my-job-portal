@@ -9,7 +9,10 @@ pipeline {
                 label "jenkins-slave-node-1"
             }
             steps {
-                echo "${env.BUILD_NUMBER}"
+                echo "Branch Name: "${GIT_LOCAL_BRANCH}"
+                echo "Committer Name:" "${GIT_COMMITTER_NAME}"
+                echo "Committer Email: "${GIT_COMMITTER_EMAIL}"
+
                 echo "Build stage is running..."
                 sh "node -v"
                 sh "npm -v"
@@ -26,6 +29,13 @@ pipeline {
                 echo "Tests are running...."
             }
         }
-
+        stage('Test') {
+            agent {
+                label "default"
+            }
+            steps {
+                 echo "Tests are running...."
+             }
+        }
     }
 }
