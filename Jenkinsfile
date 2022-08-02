@@ -4,12 +4,12 @@ pipeline {
     tools {nodejs "Node 16.10.0"}
 
     stages {
-        echo "${env.BUILD_NUMBER}"
         stage('Build') {
             agent {
                 label "jenkins-slave-node-1"
             }
             steps {
+                echo "${env.BUILD_NUMBER}"
                 echo "Build stage is running..."
                 sh "node -v"
                 sh "npm -v"
