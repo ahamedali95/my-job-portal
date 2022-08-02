@@ -61,9 +61,9 @@ pipeline {
                      if (ARTIFACTORY_RESPONSE == "OK") {
                          echo 'uploading'
                          sh 'pwd'
-
+                         unstash 'app'
                          sh 'ls'
-                         sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} --fail-no-op=true LICENSE.txt my-job-portal-fe-generic-local/'
+                         sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} --fail-no-op=true app my-job-portal-fe-generic-local/'
 
                      } else {
                          echo 'Artifactory is not online!'
