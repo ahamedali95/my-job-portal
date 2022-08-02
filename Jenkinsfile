@@ -41,7 +41,6 @@ pipeline {
         }
         stage('Deploy to Dev') {
             agent {
-                label 'default'
                 docker {
                     image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0'
                     reuseNode true
