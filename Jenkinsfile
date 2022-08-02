@@ -47,7 +47,7 @@ pipeline {
             }
             steps {
                 echo 'Pinging artifactory...'
-                ARTIFACTORY_RESPONSE = s(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/')
+                ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/')
                 echo 'Response: ${ARTIFACTORY_RESPONSE}'
 
                 script {
