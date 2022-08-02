@@ -22,14 +22,7 @@ pipeline {
                 sh 'npm run lint'
                 sh 'npm run build:prod'
             }
-            post {
-                always {
-                    script {
-                        echo 'Archiving artifact...'
-                        zip archive: true, dir: 'build', glob: '', zipFile: "job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip"
-                    }
-                }
-            }
+
         }
         stage('Test') {
             agent {
