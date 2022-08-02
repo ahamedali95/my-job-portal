@@ -61,9 +61,12 @@ pipeline {
                      if (ARTIFACTORY_RESPONSE == "OK") {
                          echo 'uploading'
                          sh 'pwd'
-                         unstash 'app'
+                         dir('/var/lib/jenkins/workspace/job-portal-frontend_JB-3') {
+                             unstash 'app'
+                         }
+
                          sh 'ls'
-                         sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} --fail-no-op=true app my-job-portal-fe-generic-local/'
+                         sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} --fail-no-op=true job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip my-job-portal-fe-generic-local/'
 
                      } else {
                          echo 'Artifactory is not online!'
