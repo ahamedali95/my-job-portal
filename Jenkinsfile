@@ -19,7 +19,7 @@ pipeline {
             post {
                 always {
                    script{
-                                       zip archive: true, dir: 'build', glob: '', zipFile: 'testz.zip'
+                                       zip archive: true, dir: 'build', glob: '', zipFile: "job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip"
                                 }
                 }
             }
