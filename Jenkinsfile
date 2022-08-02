@@ -9,10 +9,6 @@ pipeline {
                 label "jenkins-slave-node-1"
             }
             steps {
-                echo "Branch Name: ${env.GIT_LOCAL_BRANCH}"
-                echo "Committer Name: ${env.GIT_COMMITTER_NAME}"
-                echo "Committer Email: ${env.GIT_COMMITTER_EMAIL}"
-
                 echo "Build stage is running..."
                 sh "node -v"
                 sh "npm -v"
@@ -34,7 +30,9 @@ pipeline {
                 label "default"
             }
             steps {
-                 echo "Deploying...."
+                 rtUpload(
+                                     serverId: "artifactory"
+                                 )
              }
         }
     }
