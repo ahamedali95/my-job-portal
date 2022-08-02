@@ -9,9 +9,9 @@ pipeline {
                 label "jenkins-slave-node-1"
             }
             steps {
-                echo "Branch Name: ${GIT_LOCAL_BRANCH}"
-                echo "Committer Name: ${GIT_COMMITTER_NAME}"
-                echo "Committer Email: ${GIT_COMMITTER_EMAIL}"
+                echo "Branch Name: ${env.GIT_LOCAL_BRANCH}"
+                echo "Committer Name: ${env.GIT_COMMITTER_NAME}"
+                echo "Committer Email: ${env.GIT_COMMITTER_EMAIL}"
 
                 echo "Build stage is running..."
                 sh "node -v"
