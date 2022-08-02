@@ -43,8 +43,15 @@ pipeline {
                                  )
                  rtUpload(
                                      serverId: "artifactory-server-id",
-                                     pattern: "",
-                                     target: "my-job-portal-fe-generic-local"
+                                     spec: """{
+                                               "files": [
+                                                       {
+                                                           "pattern": "",
+                                                           "target: "my-job-portal-fe-generic-local"
+                                                       }
+                                               ]
+                                           }"""
+
                                  )
              }
         }
