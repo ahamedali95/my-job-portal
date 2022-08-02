@@ -25,6 +25,7 @@ pipeline {
             post {
                 always {
                     script {
+                        echo 'Archiving artifact...'
                         zip archive: true, dir: 'build', glob: '', zipFile: "job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip"
                     }
                 }
@@ -40,26 +41,27 @@ pipeline {
         }
         stage('Deploy to Dev') {
             agent {
+                label 'default'
                 docker {
-                          image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0'
-                          reuseNode true
-                        }
+                    image 'releases-docker.jfrog.io/jfrog/jfrog-cli-v2:2.2.0'
+                    reuseNode true
+                }
             }
             steps {
                 script {
                     echo 'Pinging artifactory...'
-                                    ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/', returnStdout: true).trim()
-                                    echo "Response: ${ARTIFACTORY_RESPONSE}"
+                    ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/', returnStdout: true).trim()
+                    echo "Response: ${ARTIFACTORY_RESPONSE}"
 
 
-                                       if (ARTIFACTORY_RESPONSE == "OK") {
-                                                           echo 'uploading'
-                                                           sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} job-portal-ui-1.0.0.*.zip my-job-portal-fe-generic-local/'
+                     if (ARTIFACTORY_RESPONSE == "OK") {
+                         echo 'uploading'
+                         sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} job-portal-ui-1.0.0.*.zip my-job-portal-fe-generic-local/'
 
-                                       }
+                     } else {
+                         echo 'Artifactory is not online!'
+                     }
                 }
-
-
             }
         }
     }
