@@ -61,7 +61,7 @@ pipeline {
                      if (ARTIFACTORY_RESPONSE == "OK") {
                          echo 'uploading'
                          sh 'pwd'
-                         dir("${env.WORKSPACE}job-portal-frontend_${GIT_BRANCH}") {
+                         dir("${env.WORKSPACE}job-portal-frontend_${env.GIT_BRANCH}") {
                              unstash 'app'
                              sh 'ls'
                                                       sh "jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} --fail-no-op=true job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip my-job-portal-fe-generic-local/"
