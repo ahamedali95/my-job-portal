@@ -45,13 +45,14 @@ pipeline {
                     url: 'https://ahamedrepo.jfrog.io/artifactory/',
                     credentialsId: 'artifactory-server-id'
                 )
+                echo "artifactory connected"
                 rtUpload(
                     serverId: 'artifactory-server-id',
                     spec: '''
 
                         {
                              "files": [{
-                                  "pattern": "job-portal-ui-1.0.0.4.zip",
+                                  "pattern": "",
                                   "target": "my-job-portal-fe-generic-local/"
                              }]
                         }
