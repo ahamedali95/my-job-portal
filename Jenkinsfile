@@ -18,7 +18,7 @@ pipeline {
             }
             post {
                 always {
-                   archiveArtifacts artifacts: 'build'
+                   archiveArtifacts artifacts: '/workspace'
                 }
             }
         }
