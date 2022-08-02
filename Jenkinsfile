@@ -27,6 +27,7 @@ pipeline {
                     script {
                         echo 'Archiving artifact...'
                         zip archive: true, dir: 'build', glob: '', zipFile: "job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip"
+                        stash includes: "job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip", name: 'app'
                     }
                 }
             }
@@ -51,7 +52,7 @@ pipeline {
                     echo 'Pinging artifactory...'
                     ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/', returnStdout: true).trim()
                     echo "Response: ${ARTIFACTORY_RESPONSE}"
-                    dir('../jobs') {
+
                     sh "ls"
                     sh 'pwd'
                     echo "${env.BUILD_NUMBER}"
@@ -67,7 +68,7 @@ pipeline {
                      } else {
                          echo 'Artifactory is not online!'
                      }
-                     }
+
                 }
             }
         }
