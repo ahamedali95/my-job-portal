@@ -18,7 +18,7 @@ pipeline {
             }
             post {
                 always {
-                   archiveArtifacts artifacts: '/usr'
+                   archiveArtifacts artifacts: 'build/**'
                 }
             }
         }
