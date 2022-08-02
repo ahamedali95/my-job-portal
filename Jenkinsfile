@@ -4,6 +4,10 @@ pipeline {
     tools {
         nodejs 'Node 16.10.0'
     }
+    environment {
+        CI = true
+        ARTIFACTORY_ACCESS_TOKEN = credentials('artifactory-server-id')
+    }
 
     stages {
         stage('Build') {
@@ -40,28 +44,7 @@ pipeline {
             }
             steps {
                 echo 'Uploading...'
-                rtServer(
-                    id: 'artifactory-server-id',
-                    url: 'https://ahamedrepo.jfrog.io/artifactory/',
-                    credentialsId: 'artifactory-server-id'
-                )
-                                echo "artifactory connected"
-
-                rtUpload(
-                    serverId: 'artifactory-server-id',
-                    spec: '''
-
-                        {
-                             "files": [{
-                                  "pattern": "job-portal-ui-1.0.0.4.zip",
-                                  "target": "my-job-portal-fe-generic-local/"
-                             }]
-                        }
-                    ''',
-                    buildName: 'holyFrog',
-                        buildNumber: '42',
-
-                )
+                sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} job-portal-ui-1.0.0.*.zip my-job-portal-fe-generic-local/'
             }
         }
     }
