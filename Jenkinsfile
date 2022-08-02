@@ -52,7 +52,8 @@ pipeline {
                                     echo "Response: ${ARTIFACTORY_RESPONSE}"
 
 
-                                       if (ARTIFACTORY_RESPONSE == 'OK') {
+                                       if (ARTIFACTORY_RESPONSE == "OK") {
+                                                           echo 'uploading'
                                                            sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} job-portal-ui-1.0.0.*.zip my-job-portal-fe-generic-local/'
 
                                        }
