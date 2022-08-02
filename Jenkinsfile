@@ -18,7 +18,9 @@ pipeline {
             }
             post {
                 always {
-                   archiveArtifacts artifacts: 'build/**'
+                   script{
+                                       zip archive: true, dir: 'build', glob: '', zipFile: 'testz.zip'
+                                }
                 }
             }
         }
