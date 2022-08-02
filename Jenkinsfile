@@ -42,7 +42,7 @@ pipeline {
                 echo 'Uploading...'
                 rtServer(
                     id: 'artifactory-server-id',
-                    url: 'https://ahamedrepo.jfrog.io/artifactory',
+                    url: 'https://ahamedrepo.jfrog.io/artifactory/',
                     credentialsId: 'artifactory-server-id'
                 )
                 rtUpload(
@@ -55,7 +55,9 @@ pipeline {
                                   "target": "my-job-portal-fe-generic-local/"
                              }]
                         }
-                    '''
+                    ''',
+                    buildName: 'holyFrog',
+                        buildNumber: '42',
 
                 )
             }
