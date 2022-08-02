@@ -51,7 +51,7 @@ pipeline {
                     echo 'Pinging artifactory...'
                     ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/', returnStdout: true).trim()
                     echo "Response: ${ARTIFACTORY_RESPONSE}"
-
+                    echo "${env.WORKSPACE}"
 
                      if (ARTIFACTORY_RESPONSE == "OK") {
                          echo 'uploading'
