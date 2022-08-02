@@ -51,7 +51,7 @@ pipeline {
                     echo 'Pinging artifactory...'
                     ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/', returnStdout: true).trim()
                     echo "Response: ${ARTIFACTORY_RESPONSE}"
-                    sh "cd /var/lib/jenkins/jobs/job-portal-frontend/branches/JB-3/builds"
+                    dir('../jobs') {
                     sh "ls"
                     sh 'pwd'
                     echo "${env.BUILD_NUMBER}"
@@ -66,6 +66,7 @@ pipeline {
 
                      } else {
                          echo 'Artifactory is not online!'
+                     }
                      }
                 }
             }
