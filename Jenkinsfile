@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Test') {
             agent {
-                label "Built-In Node"
+                label "default"
             }
             steps {
                 echo "Tests are running...."
