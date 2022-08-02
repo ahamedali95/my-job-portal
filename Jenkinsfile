@@ -53,22 +53,13 @@ pipeline {
                     ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/', returnStdout: true).trim()
                     echo "Response: ${ARTIFACTORY_RESPONSE}"
 
-                    sh "ls"
-                    sh 'pwd'
-                    echo "${env.BUILD_NUMBER}"
-                    echo "${env.GIT_BRANCH}"
-
                      if (ARTIFACTORY_RESPONSE == "OK") {
                          echo 'uploading'
-                         sh 'pwd'
                          dir("${env.WORKSPACE}/job-portal-frontend_${env.GIT_BRANCH}") {
                              unstash 'app'
-                             sh 'ls'
-                                                      sh "jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} --fail-no-op=true job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip my-job-portal-fe-generic-local/"
-
+                             sh "jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} --fail-no-op=true job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip my-job-portal-fe-generic-local/"
+                             deleteStash name: 'app'
                          }
-
-
                      } else {
                          echo 'Artifactory is not online!'
                      }
