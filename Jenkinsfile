@@ -4,6 +4,7 @@ pipeline {
     tools {nodejs "Node 16.10.0"}
 
     stages {
+        echo %BUILD_NUMBER%
         stage('Build') {
             agent {
                 label "jenkins-slave-node-1"
