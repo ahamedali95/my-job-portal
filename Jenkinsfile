@@ -29,12 +29,12 @@ pipeline {
                 echo "Tests are running...."
             }
         }
-        stage('Test') {
+        stage('Deploy to Dev') {
             agent {
                 label "default"
             }
             steps {
-                 echo "Tests are running...."
+                 echo "Deploying...."
              }
         }
     }
