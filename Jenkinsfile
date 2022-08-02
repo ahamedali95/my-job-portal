@@ -52,7 +52,7 @@ pipeline {
                         {
                              "files": [{
                                   "pattern": "job-portal-ui-1.0.0.*.zip",
-                                  "target": "my-job-portal-fe-generic-local"
+                                  "target": "my-job-portal-fe-generic-local/"
                              }]
                         }
                     '''
