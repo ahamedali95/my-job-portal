@@ -30,6 +30,12 @@ pipeline {
                 label "default"
             }
             steps {
+                  echo "Uploading..."
+                  rtServer (
+                                     id: "artifactory-server-id",
+                                     url: "https://ahamedrepo.jfrog.io/artifactory",
+                                     credentialsId: "artifactory-server-id"
+                                 )
                  rtUpload(
                                      serverId: "artifactory"
                                  )
