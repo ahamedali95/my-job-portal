@@ -51,7 +51,7 @@ pipeline {
 
                         {
                              "files": [{
-                                  "pattern": "job-portal-ui-1.0.0.*.zip",
+                                  "pattern": "job-portal-ui-1.0.0.4.zip",
                                   "target": "my-job-portal-fe-generic-local/"
                              }]
                         }
