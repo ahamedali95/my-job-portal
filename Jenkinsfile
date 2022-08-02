@@ -16,6 +16,11 @@ pipeline {
                 sh 'npm run lint'
                 sh 'npm run build:prod'
             }
+            post {
+                always {
+                   archiveArtifacts artifacts: 'build/libs'
+                }
+            }
         }
         stage('Test') {
             agent {
@@ -37,7 +42,9 @@ pipeline {
                                      credentialsId: "artifactory-server-id"
                                  )
                  rtUpload(
-                                     serverId: "artifactory-server-id"
+                                     serverId: "artifactory-server-id",
+                                     pattern: "",
+                                     target: "my-job-portal-fe-generic-local"
                                  )
              }
         }
