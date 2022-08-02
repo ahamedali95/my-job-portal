@@ -51,7 +51,7 @@ pipeline {
                     echo 'Pinging artifactory...'
                     ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/', returnStdout: true).trim()
                     echo "Response: ${ARTIFACTORY_RESPONSE}"
-                    sh "cd {env.WORKSPACE}/branches/JB-3/builds/57/archive"
+                    sh "cd ${env.WORKSPACE}/branches/JB-3/builds/57/archive"
                     sh 'pwd'
                     echo "${env.BUILD_NUMBER}"
                     echo "${env.GIT_LOCAL_BRANCH}"
