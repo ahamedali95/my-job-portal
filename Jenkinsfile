@@ -46,16 +46,19 @@ pipeline {
                         }
             }
             steps {
-                echo 'Pinging artifactory...'
-                ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/', returnStdout: true)
-                echo 'Response: ${ARTIFACTORY_RESPONSE}'
-
                 script {
-                   if (ARTIFACTORY_RESPONSE == 'OK') {
-                                       sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} job-portal-ui-1.0.0.*.zip my-job-portal-fe-generic-local/'
+                    echo 'Pinging artifactory...'
+                                    ARTIFACTORY_RESPONSE = sh(script: 'jfrog rt ping --url https://ahamedrepo.jfrog.io/artifactory/', returnStdout: true)
+                                    echo 'Response: ${ARTIFACTORY_RESPONSE}'
 
-                   }
+
+                                       if (ARTIFACTORY_RESPONSE == 'OK') {
+                                                           sh 'jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} job-portal-ui-1.0.0.*.zip my-job-portal-fe-generic-local/'
+
+                                       }
                 }
+
+
             }
         }
     }
