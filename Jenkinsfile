@@ -37,7 +37,7 @@ pipeline {
                                      credentialsId: "artifactory-server-id"
                                  )
                  rtUpload(
-                                     serverId: "artifactory"
+                                     serverId: "artifactory-server-id"
                                  )
              }
         }
