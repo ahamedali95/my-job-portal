@@ -23,6 +23,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Cache node_modules
+          id: cache-node-modules
+          uses: actions/cache@v2
+          with:
+            path: node_modules
+            key: node-modules-${{ hashFiles('package-lock.json') }}
+
       - name: Install dependencies
         run: npm ci
 
@@ -33,10 +40,10 @@ jobs:
           echo "Type checking in progress..."
           npm run check:typings
 
-      - name: Create artifacts
-        run: |
-          echo "Running production build..."
-          npm run build:prod
+#      - name: Create artifacts
+#        run: |
+#          echo "Running production build..."
+#          npm run build:prod
 
   test:
     name: Test
@@ -44,7 +51,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Unit Test
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Restore node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Unit Tests
         run: |
           echo "Unit Tests are running..."
           npm run test
