@@ -65,7 +65,7 @@ jobs:
     name: Vulnerability Scan
     needs: test
     runs-on: ubuntu-latest
-    timeout-miutes: 10
+    timeout-minutes: 10
     environment:
       name: dev
 
