@@ -90,8 +90,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: dev
-    env:
-      JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
 
     steps:
       - name: Checkout repository
@@ -117,7 +115,10 @@ jobs:
       - name: Upload artifacts
         uses: jfrog/setup-jfrog-cli@v2
 
-      - run: |
+      - name: Upload
+        env:
+          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
+        run: |
           jf c add --url https://ahamedrepo.jfrog.io/artifactory/ --password "$JFROG_TOKEN"
           jf rt ping
 #          jf c add --url ${{ secrets.JFROG_ARTIFACTORY_URL }}
