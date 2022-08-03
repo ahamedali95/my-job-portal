@@ -40,6 +40,14 @@ jobs:
           echo "Type checking in progress..."
           npm run check:typings
 
+      - name: Create artifacts
+        run: |
+          echo "Running production build..."
+          npm run build:prod
+
+          sh "pwd"
+          sh "ls"
+
   test:
     name: Test
     needs: build
@@ -106,6 +114,9 @@ jobs:
         run: |
           echo "Running production build..."
           npm run build:prod
+
+          sh "pwd"
+          sh "ls"
 
       - name: Upload artifacts
         uses: jfrog/setup-jfrog-cli@v2
