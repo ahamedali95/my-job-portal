@@ -117,7 +117,7 @@ jobs:
         env:
           JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
       - run: |
-          jf c --url https://ahamedartifactory.jfrog.io/artifactory
+          jf c add --url https://ahamedartifactory.jfrog.io/artifactory
           jf rt ping
           jf ru build my-job-portal-ui-generic-local/
 
