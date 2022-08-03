@@ -4,8 +4,8 @@
   "description": "",
   "main": "build/index.html",
   "engines": {
-    "npm": ">=8.11.0",
-    "node": ">=16.6.0"
+    "node": ">=16.x",
+    "npm": ">=7.x"
   },
   "scripts": {
     "check:typings": "tsc",
