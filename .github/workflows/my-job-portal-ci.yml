@@ -114,10 +114,10 @@ jobs:
 
       - name: Upload artifacts
         uses: jfrog/setup-jfrog-cli@v2
-        with:
-          JFROG_TOKEN: "hello"
+        env:
+          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
       - run: |
-          echo "$JFROG_TOKEN"
+          jf rt ping
 #          jf c add --url ${{ secrets.JFROG_ARTIFACTORY_URL }}
 #          echo ${{ secrets.JFROG_ARTIFACTORY_URL }}
 #          echo "URL: ${secrets.JFROG_ARTIFACTORY_URL}"
