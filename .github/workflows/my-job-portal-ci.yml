@@ -73,13 +73,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Restore node_modules
-        id: cache-node-modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('package-lock.json') }}
-
       - name: SAST Scan
         uses: ShiftLeftSecurity/scan-action@master
         with:
@@ -99,6 +92,9 @@ jobs:
       name: dev
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Restore node_modules
         id: cache-node-modules
         uses: actions/cache@v2
@@ -111,12 +107,13 @@ jobs:
           echo "Running production build..."
           npm run build:prod
 
-#      - name: Upload artifacts
-#        uses: jfrog/setup-jfrog-cli@v2
-#        env:
-#          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
-#        run: |
-#          jf c use dev-server
-#          jf rt ping
+      - name: Upload artifacts
+        uses: jfrog/setup-jfrog-cli@v2
+        env:
+          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
+      - run: |
+          jf c use dev-server
+          jf rt ping
+          jf ru
 
 
