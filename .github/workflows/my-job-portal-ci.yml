@@ -40,16 +40,6 @@ jobs:
           echo "Type checking in progress..."
           npm run check:typings
 
-      - name: Create artifacts
-        run: |
-          echo "Running production build..."
-          npm run build:prod
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: my-artifact
-          path: build
-
   test:
     name: Test
     needs: build
@@ -117,13 +107,18 @@ jobs:
           echo "Running production build..."
           npm run build:prod
 
-#      - name: Upload artifacts
-#        uses: jfrog/setup-jfrog-cli@v2
-#        env:
-#          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
-#      - run: |
-#          jf c use dev-server
-#          jf rt ping
-#          jf ru
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build
+
+      - name: Upload artifacts
+        uses: jfrog/setup-jfrog-cli@v2
+        env:
+          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
+      - run: |
+          jf c use dev-server
+          jf rt ping
+          jf ru build my-job-portal-ui-generic-local/
 
 
