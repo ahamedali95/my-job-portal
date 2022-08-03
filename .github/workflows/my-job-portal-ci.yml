@@ -67,7 +67,7 @@ jobs:
 #          npm run test
 
   security:
-    name: Security Scan
+    name: Vulnerability Scan
     needs: test
     runs-on: ubuntu-latest
     environment:
@@ -76,6 +76,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Restore node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
 
       - name: SAST scan
         uses: AppThreat/sast-scan-action@v1.0.0
@@ -87,5 +94,9 @@ jobs:
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  publish:
+    name: Publish Artifacts
+    needs:
 
 
