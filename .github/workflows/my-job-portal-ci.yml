@@ -1,5 +1,5 @@
 name: my-job-portal-ui
-on: [pull_request, workflow_call]
+on: [pull_request, workflow_dispatch]
 default:
 jobs:
   build:
