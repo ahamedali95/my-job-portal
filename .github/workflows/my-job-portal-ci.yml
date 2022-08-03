@@ -114,12 +114,13 @@ jobs:
 
       - name: Upload artifacts
         uses: jfrog/setup-jfrog-cli@v2
-        env:
+        with:
           JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
       - run: |
           jf c add --url https://ahamedartifactory.jfrog.io/artifactory
-          echo "URL: ${{ secrets.JFROG_ARTIFACTORY_URL }}"
+          echo ${{ secrets.JFROG_ARTIFACTORY_URL }}
+          echo "URL: ${secrets.JFROG_ARTIFACTORY_URL}"
           sudo touch newfile.txt
-          jf rt upload newfile.txt my-job-portal-ui-generic-local/
+          jf rt upload --newfile.txt my-job-portal-ui-generic-local/
 
 
