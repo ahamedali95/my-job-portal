@@ -54,14 +54,13 @@ pipeline {
                     echo "Response: ${ARTIFACTORY_RESPONSE}"
 
                      if (ARTIFACTORY_RESPONSE == "OK") {
-                         echo 'uploading'
+                         echo 'uploading artifacts to JFrog artifactory...'
                          dir("${env.WORKSPACE}/job-portal-frontend_${env.GIT_BRANCH}") {
                              unstash 'app'
                              sh "jfrog rt upload --url https://ahamedrepo.jfrog.io/artifactory/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} --fail-no-op=true job-portal-ui-1.0.0.${env.BUILD_NUMBER}.zip my-job-portal-fe-generic-local/"
-                             deleteStash name: 'app'
                          }
                      } else {
-                         echo 'Artifactory is not online!'
+                         echo 'Unable to reach artifactory. Check the status of the artifactory and/or credentials'
                      }
 
                 }
