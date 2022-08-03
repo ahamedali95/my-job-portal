@@ -120,6 +120,7 @@ jobs:
       - run: |
           jf rt ping --url https://ahamedrepo.jfrog.io/artifactory/
           sudo touch newfile.txt
+          jf config show
           jf rt upload --url https://ahamedrepo.jfrog.io/artifactory/ newfile.txt my-job-portal-ui-generic-local/
 #          jf c add --url https://ahamedrepo.jfrog.io/artifactory/ --password "$JFROG_TOKEN"
 #          jf rt ping
