@@ -71,7 +71,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     environment:
-      name: common
+      name: dev
 
     steps:
       - name: Checkout repository
@@ -85,8 +85,6 @@ jobs:
       - name: SCA scan
         uses: snyk/actions/node@master
         continue-on-error: true
-        with:
-          languages: ${{ matrix.node-version }}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
