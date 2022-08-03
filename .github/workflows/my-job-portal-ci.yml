@@ -117,6 +117,7 @@ jobs:
         env:
           JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
       - run: |
+          jf c add --url https://ahamedrepo.jfrog.io/artifactory/ --password "$JFROG_TOKEN"
           jf rt ping
 #          jf c add --url ${{ secrets.JFROG_ARTIFACTORY_URL }}
 #          echo ${{ secrets.JFROG_ARTIFACTORY_URL }}
