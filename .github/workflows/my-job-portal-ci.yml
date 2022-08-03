@@ -45,8 +45,10 @@ jobs:
           echo "Running production build..."
           npm run build:prod
 
-          sh "pwd"
-          sh "ls"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: build
 
   test:
     name: Test
