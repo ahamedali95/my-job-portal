@@ -119,6 +119,6 @@ jobs:
       - run: |
           jf c add --url https://ahamedartifactory.jfrog.io/artifactory
           jf rt ping
-          jf ru build my-job-portal-ui-generic-local/
+          jf rt upload build my-job-portal-ui-generic-local/
 
 
