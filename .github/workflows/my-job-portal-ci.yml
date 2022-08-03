@@ -12,7 +12,7 @@ jobs:
       fail-fast: true
       matrix:
         node-version: [ '16.10.0' ]
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -41,21 +41,22 @@ jobs:
   test:
     name: Test
     needs: build
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Unit Test
         run: |
           echo "Unit Tests are running..."
+          npm run test
 
   security:
     name: Security Scan
     needs: test
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run SAST scan
         uses: AppThreat/sast-scan-action@v1.0.0
