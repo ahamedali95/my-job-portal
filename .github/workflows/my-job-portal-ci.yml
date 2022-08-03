@@ -118,7 +118,7 @@ jobs:
           JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
       - run: |
           jf c add --url https://ahamedartifactory.jfrog.io/artifactory
-          jf rt ping
+          echo "URL: ${{ secrets.JFROG_ARTIFACTORY_URL }}"
           sudo touch newfile.txt
           jf rt upload newfile.txt my-job-portal-ui-generic-local/
 
