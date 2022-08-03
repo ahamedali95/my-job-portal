@@ -118,7 +118,6 @@ jobs:
           JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
       - run: |
           jf c add --url ${{ secrets.JFROG_ARTIFACTORY_URL }}
-#          echo ${{ secrets.JFROG_ARTIFACTORY_URL }}
           echo "URL: ${secrets.JFROG_ARTIFACTORY_URL}"
           sudo touch newfile.txt
           jf rt upload --newfile.txt my-job-portal-ui-generic-local/
