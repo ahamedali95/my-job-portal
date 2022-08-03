@@ -86,7 +86,7 @@ jobs:
 
   publish:
     name: Publish Artifacts
-    needs: security
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: dev
