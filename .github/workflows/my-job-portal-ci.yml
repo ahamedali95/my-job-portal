@@ -95,8 +95,8 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-  publish:
-    name: Publish Artifacts
-    needs:
+#  publish:
+#    name: Publish Artifacts
+#    needs:
 
 
