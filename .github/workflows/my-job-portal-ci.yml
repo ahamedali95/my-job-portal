@@ -116,7 +116,7 @@ jobs:
         uses: jfrog/setup-jfrog-cli@v2
 
       - name: Upload
-        env:
+        with:
           JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
         run: |
           jf c add --url https://ahamedrepo.jfrog.io/artifactory/ --password "$JFROG_TOKEN"
