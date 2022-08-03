@@ -14,11 +14,13 @@ jobs:
         node-version: [ '16.10.0' ]
     runs-on: macos-latest
     steps:
+      - name: Checkout repository
       - uses: actions/checkout@v3
 
+      - name: Download binary
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.10.0'
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm ci
@@ -30,7 +32,7 @@ jobs:
           echo "Type checking in progress..."
           npm run check:typings
 
-      - name: Webpack Build
+      - name: Create artifacts
         run: |
           echo "Running production build..."
           npm run build:prod
@@ -43,5 +45,27 @@ jobs:
       - name: Unit Test
         run: |
           echo "Unit Tests are running..."
+
+  security:
+    name: Security Scan
+    needs: test
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run SAST scan
+        uses: AppThreat/sast-scan-action@v1.0.0
+        with:
+          type: nodejs
+
+      - name: Run SCA scan
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        with:
+          languages: ${{ matrix.node-version }}
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
 
