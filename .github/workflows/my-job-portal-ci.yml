@@ -40,11 +40,6 @@ jobs:
           echo "Type checking in progress..."
           npm run check:typings
 
-#      - name: Create artifacts
-#        run: |
-#          echo "Running production build..."
-#          npm run build:prod
-
   test:
     name: Test
     needs: build
@@ -70,6 +65,7 @@ jobs:
     name: Vulnerability Scan
     needs: test
     runs-on: ubuntu-latest
+    timeout-miutes: 10
     environment:
       name: dev
 
@@ -95,8 +91,32 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-#  publish:
-#    name: Publish Artifacts
-#    needs:
+  publish:
+    name: Publish Artifacts
+    needs: security
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+
+    steps:
+      - name: Restore node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Create artifacts
+        run: |
+          echo "Running production build..."
+          npm run build:prod
+
+#      - name: Upload artifacts
+#        uses: jfrog/setup-jfrog-cli@v2
+#        env:
+#          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
+#        run: |
+#          jf c use dev-server
+#          jf rt ping
 
 
