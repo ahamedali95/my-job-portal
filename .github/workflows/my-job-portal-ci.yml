@@ -47,7 +47,7 @@ jobs:
 
       - uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r "${{ github.run_id }}.zip" build
+          args: zip -qq -r "my-job-portal-1.0.0.${{ github.run_id }}.zip" build
 
       - name: Static analysis
         run: |
@@ -129,10 +129,13 @@ jobs:
           ls
           echo "${{ steps.abc.outputs.all }}"
 
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
 
       - uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r "${{ github.run_id }}.zip" build
+          args: zip -qq -r "my-job-portal-${{ steps.package-version.outputs.current-version}}.${{ github.run_attempt }}.zip" build
 
       - name: publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
@@ -140,5 +143,5 @@ jobs:
           url: 'https://ahamedrepo.jfrog.io/artifactory/'
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: upload "${{ github.run_id }}.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
+          args: upload "my-job-portal-${{ steps.package-version.outputs.current-version}}.${{ github.run_attempt }}.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
 
