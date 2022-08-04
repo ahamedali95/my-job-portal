@@ -45,6 +45,7 @@ jobs:
           pwd
           ls
           cd my-job-portal
+          ls
           touch newfile.txt
           echo "${{ steps.abc.outputs.all }}"
 
