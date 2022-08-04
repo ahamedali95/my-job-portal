@@ -137,3 +137,11 @@ jobs:
           access token: ${{ secrets.JFROG_TOKEN }}
           args: upload "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
 
+      name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './build'
+          deploy-message: "Deploy from GitHub Actions"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
