@@ -10,7 +10,6 @@ on:
       choice:
         type: Select Action
         description: Make a choice
-        default: 'Build'
         required: true
         options:
           - Build
