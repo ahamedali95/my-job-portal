@@ -39,15 +39,15 @@ jobs:
       - uses: jitterbit/get-changed-files@v1
         id: abc
 
-      - name: Create artifacts
-        run: |
-          echo "Running production build..."
-          pwd
-          ls
-          cd my-job-portal
-          ls
-          touch newfile.txt
-          echo "${{ steps.abc.outputs.all }}"
+#      - name: Create artifacts
+#        run: |
+#          echo "Running production build..."
+#          pwd
+#          ls
+#          cd my-job-portal
+#          ls
+#          touch newfile.txt
+#          echo "${{ steps.abc.outputs.all }}"
 
       - name: Install dependencies
         run: npm ci
@@ -129,6 +129,8 @@ jobs:
           echo "Running production build..."
           npm run build:prod
           touch newfile.txt
+          cd my-job-portal
+          ls
           echo "${{ steps.abc.outputs.all }}"
 
       - name: publish to artifactory
