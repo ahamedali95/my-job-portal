@@ -19,11 +19,12 @@ on:
         type: boolean
         description: Deploy from artifactory?
       artifactVersion:
-        required: ${{ inputs.deployFromArtifactory }}
+        description: Specify artifact version
 
 env:
   INPUT_DEPLOY_FROM_ARTIFACTORY: ${{ inputs.deployFromArtifactory }}
   INPUT_ACTION: ${{ inputs.action }}
+  INPUT_ARTIFACT_VERSION: ${{ inputs.artifactVersion }}
 
 jobs:
   build:
