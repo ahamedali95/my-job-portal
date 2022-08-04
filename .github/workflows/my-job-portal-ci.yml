@@ -43,6 +43,8 @@ jobs:
         run: |
           echo "Running production build..."
           npm run build:prod
+          pwd
+          ls
           touch newfile.txt
           echo "${{ steps.abc.outputs.all }}"
 
