@@ -7,10 +7,6 @@ on:
 
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: '../'
-
 jobs:
   build:
     name: Build
@@ -36,21 +32,11 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
-      - uses: jitterbit/get-changed-files@v1
-        id: abc
-
-#      - name: Create artifacts
-#        run: |
-#          echo "Running production build..."
-#          pwd
-#          ls
-#          cd my-job-portal
-#          ls
-#          touch newfile.txt
-#          echo "${{ steps.abc.outputs.all }}"
-
       - name: Install dependencies
-        run: npm ci
+        run: |
+          pwd
+          ls
+          npm ci
 
       - name: Static analysis
         run: |
@@ -129,8 +115,6 @@ jobs:
           echo "Running production build..."
           npm run build:prod
           touch newfile.txt
-          cd my-job-portal
-          ls
           echo "${{ steps.abc.outputs.all }}"
 
       - name: publish to artifactory

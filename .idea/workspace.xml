@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="017e1122-4de1-4eba-ad2a-2504810bef78" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -93,8 +92,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="41" column="4" selection-start-line="41" selection-start-column="4" selection-end-line="49" selection-end-column="46" />
+            <state relative-caret-position="342">
+              <caret line="37" column="12" selection-start-line="37" selection-start-column="12" selection-end-line="37" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -266,12 +265,12 @@
       <option name="presentableId" value="Default" />
       <updated>1659194459055</updated>
       <workItem from="1659194460778" duration="29694000" />
-      <workItem from="1659451555420" duration="30355000" />
+      <workItem from="1659451555420" duration="30605000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="60049000" />
+    <option name="totallyTimeSpent" value="60299000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1057" extended-state="0" />
@@ -473,8 +472,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="41" column="4" selection-start-line="41" selection-start-column="4" selection-end-line="49" selection-end-column="46" />
+        <state relative-caret-position="342">
+          <caret line="37" column="12" selection-start-line="37" selection-start-column="12" selection-end-line="37" selection-end-column="12" />
         </state>
       </provider>
     </entry>
