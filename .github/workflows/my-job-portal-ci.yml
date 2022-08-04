@@ -158,6 +158,9 @@ jobs:
       name: ${{ inputs.action }}
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Get application version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@main
