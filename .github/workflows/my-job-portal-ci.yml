@@ -29,7 +29,7 @@ on:
 jobs:
   build:
     name: Build
-    if: deployFromArtifactory == false
+    if: inputs.deployFromArtifactory == 'false'
     strategy:
       fail-fast: true
       matrix:
