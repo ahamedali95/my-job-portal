@@ -9,7 +9,7 @@ on:
     inputs:
       action:
         type: choice
-        description: Make a choice
+        description: Perform an action
         required: true
         options:
           - Build
@@ -29,12 +29,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Verify user input
+      - name: Action verification
         if: ${{ inputs.action == 'Build' && inputs.deployFromArtifactory == true }}
         uses: actions/github-script@v3
         with:
           script: |
-            core.setFailed('Please select an environment to deploy your artifact from artifactory.')
+            core.setFailed('Please select an environment to deploy from artifactory.')
+
+      - name: Artifact version verification
+        if: ${{ inputs.deployFromArtifactory == true && artifactVersion == '' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Please specify an artifact version.')
 
   build:
     name: Build
@@ -42,6 +49,7 @@ jobs:
       fail-fast: true
       matrix:
         node-version: [ '16.10.0' ]
+    needs: init
     runs-on: ubuntu-latest
 
     steps:
