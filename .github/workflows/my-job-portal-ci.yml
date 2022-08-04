@@ -31,7 +31,7 @@ jobs:
 
       - name: Commit History
         run: |
-          git log --pretty=format:"%h %ad%x09%an%x09%s" --date=short --first-parent "${{ github.ref_name }}"
+          git log --pretty=format:"%h %ad%x09%an%x09%s" --date=short --first-parent "${{ github.ref_name }}"  | head -20
 
       - name: Download binary
         uses: actions/setup-node@v3
