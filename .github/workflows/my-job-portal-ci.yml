@@ -111,7 +111,7 @@ jobs:
         run: |
           echo "Running production build..."
           npm run build:prod
-          cd ..
+          touch newfile.txt
           echo "${{ steps.abc.outputs.all }}"
 
       - name: publish to artifactory
@@ -120,7 +120,7 @@ jobs:
           url: 'https://ahamedrepo.jfrog.io/artifactory/'
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: upload "build" "my-job-portal-fe-generic-local/" --fail-no-op=true
+          args: upload "newfile.txt" "my-job-portal-fe-generic-local/" --fail-no-op=true
 
 #      - name: Upload artifacts
 #        uses: jfrog/setup-jfrog-cli@v2
