@@ -114,17 +114,25 @@ jobs:
           name: build
           path: build
 
-      - name: Upload artifacts
-        uses: jfrog/setup-jfrog-cli@v2
-        env:
-          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
+      - name: Ping Artifactory
+          uses: katcosgrove/jfrog-actions@master
+          with:
+            cmd: 'ping'
+          env:
+            apikey: ${{ secrets.JFROG_TOKEN }}
+            url: 'https://ahamedrepo.jfrog.io/artifactory/'
 
-      - run: |
-          jf config add --url=https://ahamedrepo.jfrog.io/artifactory/ artifactory-server-id
-          jf rt ping
-          sudo touch newfile.txt
-          jf config show
-          jf rt upload --url=https://ahamedrepo.jfrog.io/artifactory/ --access-token="$JFROG_TOKEN" newfile.txt my-job-portal-ui-generic-local/
+#      - name: Upload artifacts
+#        uses: jfrog/setup-jfrog-cli@v2
+#        env:
+#          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
+
+#      - run: |
+#          jf config add --url=https://ahamedrepo.jfrog.io/artifactory/ artifactory-server-id
+#          jf rt ping
+#          sudo touch newfile.txt
+#          jf config show
+#          jf rt upload --url=https://ahamedrepo.jfrog.io/artifactory/ --access-token="$JFROG_TOKEN" newfile.txt my-job-portal-ui-generic-local/
 #          jf c add --url https://ahamedrepo.jfrog.io/artifactory/ --password "$JFROG_TOKEN"
 #          jf rt ping
 ##          jf c add --url ${{ secrets.JFROG_ARTIFACTORY_URL }}
