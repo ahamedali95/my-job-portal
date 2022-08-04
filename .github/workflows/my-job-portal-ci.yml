@@ -120,7 +120,8 @@ jobs:
           url: 'https://ahamedrepo.jfrog.io/artifactory/'
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: u ".idea" "my-job-portal-ui-generic-local/" --recursive=true --build-name=myawesomeapp
+          touch newfile.txt
+          args: u "newfile.txt" "my-job-portal-ui-generic-local/" --build-name=myawesomeapp
 
 #      - name: Upload artifacts
 #        uses: jfrog/setup-jfrog-cli@v2
