@@ -3,7 +3,7 @@ on:
   push:
     branches: [JB-3]
   pull_request:
-    branches: [master]
+    branches: [master, release/*]
 
   workflow_dispatch:
     inputs:
@@ -15,11 +15,29 @@ on:
           - Build
           - dev
           - prod
+      deployFromArtifactory:
+        type: boolean
+        description: Deploy from artifactory?
+      artifactVersion:
+        description: Specify an artifact version
 
 jobs:
+  init:
+    name: Initial Check
+    strategy:
+      fail-fast: true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verify user input
+      if: ${{ inputs.action == 'Build' && inputs.deployFromArtifactory == true }}
+      uses: actions/github-script@v3
+      with:
+        script: |
+          core.setFailed('Please select an environment to deploy your artifact from artifactory.')
+
   build:
     name: Build
-    if:
     strategy:
       fail-fast: true
       matrix:
@@ -107,7 +125,7 @@ jobs:
 
   publish:
     name: Publish Artifacts
-    if: inputs.action == 'dev' || (inputs.action == 'prod' && !contains(github.ref_name, 'release/'))
+    if: inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
     strategy:
       fail-fast: true
     needs: build
@@ -133,7 +151,7 @@ jobs:
       - name: Name Output file
         id: set-variable
         run: |
-          if [ ${{ inputs.action == 'prod' && !contains(github.ref_name, 'release/') }} ]; then
+          if [ ${{ inputs.action == 'prod' && contains(github.ref_name, 'release/') }} ]; then
             echo "Release branch"
             echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" >> $GITHUB_ENV
           else
@@ -141,6 +159,7 @@ jobs:
             echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" >> $GITHUB_ENV
           fi
         shell: bash
+
       - name: Create artifacts
         run: |
           echo "Running production build..."
@@ -177,18 +196,30 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@main
 
+      - name: Name Output file
+        id: set-variable
+        run: |
+          if [ ${{ inputs.action == 'prod' && contains(github.ref_name, 'release/') }} ]; then
+            echo "Release branch"
+            echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" >> $GITHUB_ENV
+          else
+            echo "Feature branch"
+            echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" >> $GITHUB_ENV
+          fi
+        shell: bash
+
       - name: Get artifacts
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
           url: ${{ secrets.ARTIFACTORY_URL }}
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: download "my-job-portal-fe-generic-local/my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" --fail-no-op=true
+          args: download "${{ env.file-name }}" --fail-no-op=true
 
       - name: Uncompress artifacts
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" -d build
+          args: unzip -qq "${{ env.file-name }}" -d build
 
 
       - name: Deploy to Cloud
