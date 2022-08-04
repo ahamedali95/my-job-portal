@@ -116,7 +116,7 @@ jobs:
 
       - uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}-SNAPSHOT.zip" build
+          args: zip -qq -r "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}-${{ github.run_attempt }}-SNAPSHOT.zip" build
 
       - name: publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
@@ -124,5 +124,5 @@ jobs:
           url: 'https://ahamedrepo.jfrog.io/artifactory/'
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: upload "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}-SNAPSHOT.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
+          args: upload "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}-${{ github.run_attempt }}-SNAPSHOT.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
 
