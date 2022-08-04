@@ -107,7 +107,7 @@ jobs:
 
   publish:
     name: Publish Artifacts
-    if: inputs.action == 'dev' || (inputs.action == 'prod' && !contains(github.ref_name, 'release/'))
+    if: inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
     strategy:
       fail-fast: true
     needs: build
