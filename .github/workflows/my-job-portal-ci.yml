@@ -7,7 +7,7 @@ on:
 
   workflow_dispatch:
     inputs:
-      choice:
+      action:
         type: choice
         description: Make a choice
         required: true
@@ -97,12 +97,12 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   publish:
-    if: inputs.choice == 'dev'
+    if: inputs.action == 'dev'
     name: Publish Artifacts
     needs: build
     runs-on: ubuntu-latest
     environment:
-      name: ${{ inputs.choice }}
+      name: ${{ inputs.action }}
 
     steps:
       - name: Checkout repository
@@ -127,7 +127,7 @@ jobs:
       - name: Compress artifacts
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_attempt }}-SNAPSHOT.zip" build
+          args: zip -qq -r "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" build
 
       - name: Publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
@@ -135,5 +135,5 @@ jobs:
           url: 'https://ahamedrepo.jfrog.io/artifactory/'
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: upload "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_attempt }}-SNAPSHOT.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
+          args: upload "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
 
