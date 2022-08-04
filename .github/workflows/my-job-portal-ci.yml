@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       choice:
-        type: Select Action
+        type: choice
         description: Make a choice
         required: true
         options:
