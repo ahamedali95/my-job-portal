@@ -135,10 +135,10 @@ jobs:
         run: |
           if [ ${{ inputs.action == 'prod' && contains(github.ref_name, 'release/') }} ]; then
             echo "Release branch"
-            echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip"
+            echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip" >> $GITHUB_ENV
           else
             echo "Feature branch"
-            echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip"
+            echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" >> $GITHUB_ENV
           fi
         shell: bash
       - name: Create artifacts
