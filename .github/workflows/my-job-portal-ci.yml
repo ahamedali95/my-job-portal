@@ -1,5 +1,7 @@
 name: my-job-portal-ui
 on:
+  push:
+    branches: [JB-3]
   pull_request:
     branches: [master]
 
@@ -122,7 +124,7 @@ jobs:
           jf rt ping
           sudo touch newfile.txt
           jf config show
-          jf rt upload --url=https://ahamedrepo.jfrog.io/artifactory/ --access-token="${{ env.JFROG_TOKEN }}" newfile.txt my-job-portal-ui-generic-local/
+          jf rt upload --url=https://ahamedrepo.jfrog.io/artifactory/ --access-token="${{ JFROG_TOKEN }}" newfile.txt my-job-portal-ui-generic-local/
 #          jf c add --url https://ahamedrepo.jfrog.io/artifactory/ --password "$JFROG_TOKEN"
 #          jf rt ping
 ##          jf c add --url ${{ secrets.JFROG_ARTIFACTORY_URL }}
