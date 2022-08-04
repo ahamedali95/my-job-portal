@@ -158,6 +158,10 @@ jobs:
       name: ${{ inputs.action }}
 
     steps:
+      - name: Get application version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
       - name: Get artifacts
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
