@@ -104,15 +104,15 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
+      - uses: jitterbit/get-changed-files@v1
+        id: abc
+
       - name: Create artifacts
         run: |
           echo "Running production build..."
           npm run build:prod
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: build
-          path: build
+          touch newfile.txt
+          echo "${{ steps.abc.outputs.all }}"
 
       - name: publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
