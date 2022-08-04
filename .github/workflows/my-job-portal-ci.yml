@@ -31,7 +31,7 @@ jobs:
 
       - name: Commit History
         run: |
-          git log "${github.ref_name}"
+          git log "${{ github.ref_name }}"
 
       - name: Download binary
         uses: actions/setup-node@v3
