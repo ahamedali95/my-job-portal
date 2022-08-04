@@ -35,7 +35,8 @@ jobs:
 
       - name: Commit History
         run: |
-          echo "$inputs.deployFromArtifactory"
+          echo "inputs.deployFromArtifactory: ${{ inputs.deployFromArtifactory }}"
+          echo "env.INPUT_DEPLOY_FROM_ARTIFACTORY: ${{ env.INPUT_DEPLOY_FROM_ARTIFACTORY }}"
           git log --pretty=format:"%h %ad%x09%an%x09%s" --date=short --first-parent "${{ github.ref_name }}"  | head -20
 
       - name: Download binary
