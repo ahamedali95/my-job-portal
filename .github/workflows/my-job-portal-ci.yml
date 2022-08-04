@@ -119,7 +119,8 @@ jobs:
           with:
             cmd: 'ping'
           env:
-            apikey: ${{ secrets.JFROG_TOKEN }}
+            auth: 'accesstoken'
+            token: ${{ secrets.JFROG_TOKEN }}
             url: 'https://ahamedrepo.jfrog.io/artifactory/'
 
 #      - name: Upload artifacts
