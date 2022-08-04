@@ -118,6 +118,11 @@ jobs:
           ls
           echo "${{ steps.abc.outputs.all }}"
 
+
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r build.zip build
+
       - name: publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
