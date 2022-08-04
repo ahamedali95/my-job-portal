@@ -42,8 +42,6 @@ jobs:
 
       - name: Commit History
         run: |
-          echo "inputs.deployFromArtifactory: ${{ inputs.deployFromArtifactory }}"
-          echo "env.INPUT_DEPLOY_FROM_ARTIFACTORY: ${{ env.INPUT_DEPLOY_FROM_ARTIFACTORY }}"
           git log --pretty=format:"%h %ad%x09%an%x09%s" --date=short --first-parent "${{ github.ref_name }}"  | head -20
 
       - name: Download binary
@@ -119,7 +117,6 @@ jobs:
 
   publish:
     name: Publish Artifacts
-    if: inputs.action == 'Build' || inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
     strategy:
       fail-fast: true
     needs: build
@@ -162,7 +159,7 @@ jobs:
 
   deploy_to_dev:
     name: Deploy to Dev
-    if: inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
+    if: env.INPUT_ACTION == 'dev' || (env.INPUT_ACTION == 'prod' && contains(github.ref_name, 'release/'))
     strategy:
       fail-fast: true
     needs: publish
