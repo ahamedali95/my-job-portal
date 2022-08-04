@@ -107,7 +107,7 @@ jobs:
 
   publish:
     name: Publish Artifacts
-    if: inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
+    if: inputs.action == 'dev' || (inputs.action == 'prod' && !contains(github.ref_name, 'release/'))
     strategy:
       fail-fast: true
     needs: build
@@ -133,7 +133,7 @@ jobs:
       - name: Name Output file
         id: set-variable
         run: |
-          if [ ${{ inputs.action == 'prod' && contains(github.ref_name, 'release/') }} ]; then
+          if [ ${{ inputs.action == 'prod' && !contains(github.ref_name, 'release/') }} ]; then
             echo "Release branch"
             echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip" >> $GITHUB_ENV
           else
@@ -161,7 +161,7 @@ jobs:
 
   deploy_to_dev:
     name: Deploy to Dev
-    if: inputs.action == 'prod'
+    if: inputs.action == 'dev'
     strategy:
       fail-fast: true
     needs: publish
