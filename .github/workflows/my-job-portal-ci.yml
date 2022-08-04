@@ -58,6 +58,8 @@ jobs:
 
   test:
     name: Test
+    strategy:
+      fail-fast: true
     needs: build
     runs-on: ubuntu-latest
 
@@ -79,6 +81,8 @@ jobs:
 
   security:
     name: Vulnerability Scan
+    strategy:
+      fail-fast: true
     needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -103,6 +107,8 @@ jobs:
   publish:
     if: inputs.action == 'dev'
     name: Publish Artifacts
+    strategy:
+      fail-fast: true
     needs: build
     runs-on: ubuntu-latest
     environment:
@@ -136,7 +142,7 @@ jobs:
       - name: Publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
-          url: 'https://ahamedrepo.jfrog.io/artifactory/'
+          url: 'https://ahamedrepo.jfrog.io/artiactory/'
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
           args: upload "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
