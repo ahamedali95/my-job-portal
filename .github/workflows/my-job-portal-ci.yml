@@ -108,7 +108,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   publish:
-    if: ACTION == 'Build' || ACTION == 'dev' || (ACTION == 'prod' && contains(github.ref_name, 'release/'))
+    if: $ACTION == 'Build' || $ACTION == 'dev' || ($ACTION == 'prod' && contains(github.ref_name, 'release/'))
     name: Publish Artifacts
     strategy:
       fail-fast: true
