@@ -111,7 +111,7 @@ jobs:
         run: |
           echo "Running production build..."
           npm run build:prod
-          touch newfile.txt
+          cd ..
           echo "${{ steps.abc.outputs.all }}"
 
       - name: publish to artifactory
