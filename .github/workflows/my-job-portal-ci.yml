@@ -150,12 +150,12 @@ jobs:
     deploy_to_dev:
       if: inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
       name: Deploy to Dev
-        strategy:
-          fail-fast: true
-        needs: publish
-        runs-on: ubuntu-latest
-        environment:
-          name: ${{ inputs.action }}
+      strategy:
+        fail-fast: true
+      needs: publish
+      runs-on: ubuntu-latest
+      environment:
+        name: ${{ inputs.action }}
 
       steps:
         - name: Get artifacts
