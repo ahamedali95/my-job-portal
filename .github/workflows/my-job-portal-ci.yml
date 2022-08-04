@@ -107,7 +107,7 @@ jobs:
 
   publish:
     name: Publish Artifacts
-    if: inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
+    if: inputs.action == 'dev' || (inputs.action == 'prod' && !contains(github.ref_name, 'release/'))
     strategy:
       fail-fast: true
     needs: build
@@ -150,6 +150,7 @@ jobs:
 
   deploy_to_dev:
     name: Deploy to Dev
+    if: inputs.action == 'prod'
     strategy:
       fail-fast: true
     needs: publish
