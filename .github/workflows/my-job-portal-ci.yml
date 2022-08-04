@@ -114,14 +114,13 @@ jobs:
           name: build
           path: build
 
-      - name: Ping Artifactory
-        uses: katcosgrove/jfrog-actions@master
+      - name: publish to artifactory
+        uses: advancedcsg-open/action-jfrog-cli@master
         with:
-          cmd: 'ping'
-        env:
-          auth: 'accesstoken'
-          token: ${{ secrets.JFROG_TOKEN }}
           url: 'https://ahamedrepo.jfrog.io/artifactory/'
+          credentials type: 'accesstoken'
+          access token: ${{ secrets.JFROG_TOKEN }}
+          args: ping
 
 #      - name: Upload artifacts
 #        uses: jfrog/setup-jfrog-cli@v2
