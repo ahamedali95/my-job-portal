@@ -7,7 +7,7 @@ on:
 
   workflow_dispatch:
     inputs:
-      action:
+      choice:
         type: Select Action
         description: Make a choice
         default: 'Build'
@@ -98,12 +98,12 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   publish:
-    if: inputs.action == 'dev'
+    if: inputs.choice == 'dev'
     name: Publish Artifacts
     needs: build
     runs-on: ubuntu-latest
     environment:
-      name: ${{ inputs.action }}
+      name: ${{ inputs.choice }}
 
     steps:
       - name: Checkout repository
