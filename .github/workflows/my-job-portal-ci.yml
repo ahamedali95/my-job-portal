@@ -105,7 +105,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   publish:
-    if: inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release'))
+    if: inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
     name: Publish Artifacts
     strategy:
       fail-fast: true
@@ -147,11 +147,36 @@ jobs:
           access token: ${{ secrets.JFROG_TOKEN }}
           args: upload "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
 
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.2
-        with:
-          publish-dir: './build'
-          deploy-message: "Deploy from GitHub Actions"
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+    deploy_to_dev:
+      if: inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
+      name: Deploy to Dev
+        strategy:
+          fail-fast: true
+        needs: publish
+        runs-on: ubuntu-latest
+        environment:
+          name: ${{ inputs.action }}
+
+      steps:
+        - name: Get artifacts
+          uses: advancedcsg-open/action-jfrog-cli@master
+          with:
+            url: ${{ secrets.ARTIFACTORY_URL }}
+            credentials type: 'accesstoken'
+            access token: ${{ secrets.JFROG_TOKEN }}
+            args: download "my-job-portal-fe-generic-local/my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" --fail-no-op=true
+
+        - name: Uncompress artifacts
+          uses: montudor/action-zip@v1
+          with:
+            args: unzip -qq "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" -d build
+
+
+        - name: Deploy to Cloud
+          uses: nwtgck/actions-netlify@v1.2
+          with:
+            publish-dir: './build'
+            deploy-message: "Deploy from GitHub Actions"
+          env:
+            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+            NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
