@@ -142,7 +142,7 @@ jobs:
       - name: Publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
-          url: 'https://ahamedrepo.jfrog.io/artiactory/'
+          url: ${{ secrets.ARTIFACTORY_URL }}
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
           args: upload "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
