@@ -44,6 +44,7 @@ jobs:
           echo "Running production build..."
           pwd
           ls
+          cd my-job-portal
           touch newfile.txt
           echo "${{ steps.abc.outputs.all }}"
 
