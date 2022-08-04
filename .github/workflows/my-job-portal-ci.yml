@@ -159,7 +159,7 @@ jobs:
 
   deploy_to_dev:
     name: Deploy to Dev
-    if: env.INPUT_ACTION == 'dev' || (env.INPUT_ACTION == 'prod' && contains(github.ref_name, 'release/'))
+    if: ${{ $env.INPUT_ACTION == 'dev' }} || (${{ env.INPUT_ACTION == 'prod' }} && contains(github.ref_name, 'release/'))
     strategy:
       fail-fast: true
     needs: publish
