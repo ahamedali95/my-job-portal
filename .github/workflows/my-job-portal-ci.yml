@@ -34,9 +34,20 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pwd
-          ls
           npm ci
+
+      - name: Create artifacts
+        run: |
+          echo "Running production build..."
+          npm run build:prod
+          touch newfile.txt
+          ls
+          echo "${{ steps.abc.outputs.all }}"
+
+
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r "${github.run_id}.zip" build
 
       - name: Static analysis
         run: |
