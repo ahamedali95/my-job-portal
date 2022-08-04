@@ -19,6 +19,9 @@ on:
         type: boolean
         description: Deploy from artifactory?
 
+env:
+  INPUT_DEPLOY_FROM_ARTIFACTORY: ${{ inputs.deployFromArtifactory }}
+
 jobs:
   build:
     name: Build
