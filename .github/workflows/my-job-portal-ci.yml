@@ -29,7 +29,7 @@ on:
 jobs:
   build:
     name: Build
-    if: inputs.deployFromArtifactory == 'false'
+    if: inputs.deployFromArtifactory == false
     strategy:
       fail-fast: true
       matrix:
@@ -69,7 +69,7 @@ jobs:
 
   test:
     name: Test
-    if: inputs.deployFromArtifactory == 'false'
+    if: inputs.deployFromArtifactory == false
     strategy:
       fail-fast: true
     needs: build
@@ -93,7 +93,7 @@ jobs:
 
   security:
     name: Vulnerability Scan
-    if: inputs.deployFromArtifactory == 'false'
+    if: inputs.deployFromArtifactory == false
     strategy:
       fail-fast: true
     needs: test
@@ -119,7 +119,7 @@ jobs:
 
   publish:
     name: Publish Artifacts
-    if: inputs.deployFromArtifactory == 'false'
+    if: inputs.deployFromArtifactory == false
     strategy:
       fail-fast: true
     needs: build
