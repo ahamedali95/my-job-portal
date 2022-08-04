@@ -36,19 +36,6 @@ jobs:
         run: |
           npm ci
 
-      - name: Create artifacts
-        run: |
-          echo "Running production build..."
-          npm run build:prod
-          touch newfile.txt
-          ls
-          echo "${{ steps.abc.outputs.all }}"
-
-
-      - uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r "my-job-portal-1.0.0.${{ github.run_id }}.zip" build
-
       - name: Static analysis
         run: |
           echo "Linting in progress..."
@@ -118,16 +105,10 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
-      - uses: jitterbit/get-changed-files@v1
-        id: abc
-
       - name: Create artifacts
         run: |
           echo "Running production build..."
           npm run build:prod
-          touch newfile.txt
-          ls
-          echo "${{ steps.abc.outputs.all }}"
 
       - name: get-npm-version
         id: package-version
@@ -135,7 +116,7 @@ jobs:
 
       - uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r "my-job-portal-${{ steps.package-version.outputs.current-version}}.${{ github.run_attempt }}.zip" build
+          args: zip -qq -r "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}-SNAPSHOT.zip" build
 
       - name: publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
@@ -143,5 +124,5 @@ jobs:
           url: 'https://ahamedrepo.jfrog.io/artifactory/'
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: upload "my-job-portal-${{ steps.package-version.outputs.current-version}}.${{ github.run_attempt }}.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
+          args: upload "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}-SNAPSHOT.zip" "my-job-portal-fe-generic-local/" --fail-no-op=true
 
