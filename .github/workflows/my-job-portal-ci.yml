@@ -37,7 +37,7 @@ jobs:
             core.setFailed('Please select an environment to deploy from artifactory.')
 
       - name: Artifact version verification
-        if: ${{ inputs.deployFromArtifactory == true && artifactVersion == '' }}
+        if: ${{ inputs.deployFromArtifactory == true && inputs.artifactVersion == '' }}
         uses: actions/github-script@v3
         with:
           script: |
