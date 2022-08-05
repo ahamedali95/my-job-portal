@@ -152,11 +152,16 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
+      - name: Create artifacts
+        run: |
+          echo "Running production build..."
+          npm run build:prod
+
       - name: Get application version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@main
 
-      - name: Name Output file
+      - name: Decide artifact file name
         id: set-variable
         run: |
           if [ ${{ inputs.action == 'prod' && contains(github.ref_name, 'release/') }} ]; then
@@ -167,11 +172,6 @@ jobs:
             echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" >> $GITHUB_ENV
           fi
         shell: bash
-
-      - name: Create artifacts
-        run: |
-          echo "Running production build..."
-          npm run build:prod
 
       - name: Compress artifacts
         uses: montudor/action-zip@v1
@@ -204,14 +204,12 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@main
 
-      - name: Name Output file
+      - name: Format file name
         id: set-variable
         run: |
-          if [ ${{ inputs.action == 'prod' && contains(github.ref_name, 'release/') }} ]; then
-            echo "Release branch"
-            echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" >> $GITHUB_ENV
+          if [ ${{ inputs.deployFromArtifactory == true }} ]; then
+            echo "file-name=${{ inputs.artifactVersion }}" >> $GITHUB_ENV
           else
-            echo "Feature branch"
             echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" >> $GITHUB_ENV
           fi
         shell: bash
