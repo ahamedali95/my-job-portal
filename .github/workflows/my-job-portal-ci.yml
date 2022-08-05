@@ -150,7 +150,7 @@ jobs:
 
   deploy_to_dev:
     name: Deploy to Dev
-    if: inputs.action == 'prod'
+    if: inputs.action == 'dev'
     strategy:
       fail-fast: true
     needs: publish
