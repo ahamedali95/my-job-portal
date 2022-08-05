@@ -241,7 +241,7 @@ jobs:
           args: unzip -qq "${{ env.file-name1 }}" -d build
 
       - name: Check
-        runs: |
+        run: |
           pwd
           ls
 
