@@ -245,13 +245,16 @@ jobs:
         with:
           args: unzip -qq "${{ env.file-name1 }}" -d build
 
-      - name: Check
-        run: |
-          pwd
-          ls
-          cd build
-          cd ls
-
+#      - name: Check
+#        run: |
+#          pwd
+#          ls
+#          cd build
+#          cd ls
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: build
 
       - name: Deploy to Cloud
         uses: nwtgck/actions-netlify@v1.2
