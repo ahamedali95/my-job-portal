@@ -240,6 +240,11 @@ jobs:
         with:
           args: unzip -qq "${{ env.file-name1 }}" -d build
 
+      - name: Check
+        runs: |
+          pwd
+          ls
+
 
       - name: Deploy to Cloud
         uses: nwtgck/actions-netlify@v1.2
