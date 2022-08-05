@@ -164,7 +164,7 @@ jobs:
       - name: Generate artifact file name
         id: set-variable
         run: |
-          if [ ${{ inputs.action == 'prod' && contains(github.ref_name, 'release/') }} ]; then
+          if ${{ inputs.action == 'prod' && contains(github.ref_name, 'release/') }}; then
             echo "Release branch"
             echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" >> $GITHUB_ENV
           else
@@ -207,7 +207,7 @@ jobs:
       - name: Generate artifact file name
         id: set-variable
         run: |
-          if [ ${{ inputs.deployFromArtifactory == 'true' }} ]; then
+          if ${{ inputs.deployFromArtifactory == 'true' }}; then
             echo "file-name1=${{ inputs.artifactVersion }}" >> $GITHUB_ENV
           else
             echo "Deploy "
