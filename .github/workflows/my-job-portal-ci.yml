@@ -220,7 +220,7 @@ jobs:
           url: ${{ secrets.ARTIFACTORY_URL }}
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: download "${{ env.file-name }}" --fail-no-op=true
+          args: download "my-job-portal-fe-generic-local/${{ env.file-name }}" --fail-no-op=true
 
       - name: Uncompress artifacts
         uses: montudor/action-zip@v1
