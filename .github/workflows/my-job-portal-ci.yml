@@ -227,6 +227,11 @@ jobs:
 #          fi
 #        shell: bash
 
+      - name: Check
+        run: |
+          pwd
+          ls
+
       - name: Get artifacts
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
@@ -244,6 +249,8 @@ jobs:
         run: |
           pwd
           ls
+          cd build
+          cd ls
 
 
       - name: Deploy to Cloud
