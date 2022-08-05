@@ -9,7 +9,7 @@ on:
     inputs:
       action:
         type: choice
-        description: Perform an action
+        description: Choose an environment to deploy your changes. If you just want to build, select 'Build'
         required: true
         options:
           - Build
