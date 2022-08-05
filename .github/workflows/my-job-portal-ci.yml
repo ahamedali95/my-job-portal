@@ -17,7 +17,7 @@ on:
           - prod
       deployFromArtifactory:
         type: boolean
-        description: Deploy from artifactory?
+        description: Do you want to deploy from artifactory? If so, select this option and choose an environment and specify an artifact version.
       artifactVersion:
         description: Specify an artifact version
 
