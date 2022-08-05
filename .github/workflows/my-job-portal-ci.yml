@@ -208,10 +208,10 @@ jobs:
         id: set-variable
         run: |
           if [ ${{ inputs.deployFromArtifactory == 'true' }} ]; then
-            echo "file-name=${{ inputs.artifactVersion }}" >> $GITHUB_ENV
+            echo "file-name1=${{ inputs.artifactVersion }}" >> $GITHUB_ENV
           else
             echo "Deploy "
-            echo "file-name=my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" >> $GITHUB_ENV
+            echo "file-name1=my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" >> $GITHUB_ENV
           fi
         shell: bash
 
@@ -233,12 +233,12 @@ jobs:
           url: ${{ secrets.ARTIFACTORY_URL }}
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: download "my-job-portal-fe-generic-local/${{ env.file-name }}" --fail-no-op=true
+          args: download "my-job-portal-fe-generic-local/${{ env.file-name1 }}" --fail-no-op=true
 
       - name: Uncompress artifacts
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq "${{ env.file-name }}" -d build
+          args: unzip -qq "${{ env.file-name1 }}" -d build
 
 
       - name: Deploy to Cloud
