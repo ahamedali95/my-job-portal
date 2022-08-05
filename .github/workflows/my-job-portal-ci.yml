@@ -188,10 +188,17 @@ jobs:
 #        env:
 #          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 #          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      - uses: jsmrcaga/action-netlify-deploy@master
+#      - uses: jsmrcaga/action-netlify-deploy@master
+#        with:
+#          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+#          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+#          NETLIFY_DEPLOY_MESSAGE: "Prod deploy v${{ github.ref }}"
+#          NETLIFY_DEPLOY_TO_PROD: true
+#          build_command: "npm run build:prod"
+
+      - name: Deploy draft to Netlify
+        uses: South-Paw/action-netlify-deploy@v1.2.0
         with:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_DEPLOY_MESSAGE: "Prod deploy v${{ github.ref }}"
-          NETLIFY_DEPLOY_TO_PROD: true
-          build_command: "npm run build:prod"
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+          build-dir: './build'
