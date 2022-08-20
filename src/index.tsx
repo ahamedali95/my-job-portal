@@ -8,7 +8,7 @@ const App: FC = () => {
     const promise = new Promise((resolved, rejected) => {
         resolved(2)
     });
-    return (<p>ahamed site new</p>);
+    return (<p>ahamed site new sunni</p>);
 };
 
 const root = createRoot(document.getElementById('root')!);
