@@ -180,10 +180,20 @@ jobs:
           args: unzip -qq "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" -d build
 
 
+      - name: Create artifacts
+        run: |
+          echo "Geeting files"
+          pwd
+          ls
+          cd build
+          ls
+          cd ..
+          pwd
+
       - name: Deploy to Cloud
         uses: nwtgck/actions-netlify@v1.2
         with:
-          publish-dir: 'build'
+          publish-dir: './build'
           deploy-message: "Deploy from GitHub Actions"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
