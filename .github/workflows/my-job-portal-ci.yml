@@ -56,7 +56,6 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          npm install netlify-cli -g
           npm run build:prod
 
       - name: Static analysis
@@ -67,11 +66,12 @@ jobs:
           npm run check:typings
 
       - name: Publish
-      uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "copper-ui"
-          heroku_email: "ahamedali95@gmail.com"
+        uses: amondnet/vercel-action@v20
+          with:
+            vercel-token: ${{ secrets.VERCEL_TOKEN }}
+            vercel-args: "--prod"
+            vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+            vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
 
   test:
     name: Test
