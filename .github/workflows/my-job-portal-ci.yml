@@ -185,10 +185,7 @@ jobs:
           echo "Geeting files"
           pwd
           ls
-          cd build
-          ls
-          cd ..
-          pwd
+
 
 #      - name: Deploy to Cloud
 #        uses: nwtgck/actions-netlify@v1.2
