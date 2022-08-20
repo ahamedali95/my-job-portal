@@ -25,7 +25,7 @@ jobs:
   init:
     name: Init
     strategy:
-      fail-fast: ttrue
+      fail-fast: true
     runs-on: ubuntu-latest
 
 
