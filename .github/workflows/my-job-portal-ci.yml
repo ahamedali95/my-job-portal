@@ -30,6 +30,8 @@ jobs:
 
 
     steps:
+      - run: echo '${{inputs.deployFromArtifactory}}'
+      - run: echo '${{inputs.artifactVersion}}'
       - name: Validate
         if: inputs.deployFromArtifactory == 'true' && inputs.artifactVersion == ''
         uses: actions/github-script@v3
