@@ -170,7 +170,7 @@ jobs:
         run: |
           echo "Geeting files"
           pwd
-          cd github/workspace
+          npm install netlify-cli -g
           pwd
 
 
@@ -213,9 +213,8 @@ jobs:
 #          build-dir: './build'
 
       - name: Publish
-        uses: netlify/actions/cli@master
         with:
-          args: deploy --dir=build --prod
+          args: netlify deploy --dir=build --prod
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
