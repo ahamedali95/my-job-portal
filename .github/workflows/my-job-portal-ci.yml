@@ -46,9 +46,18 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
+      - name: Switch directory to workspace
+        run: |
+          echo "Geeting files"
+          pwd
+          ls
+          pwd
+
       - name: Install dependencies
         run: |
           npm ci
+          npm install netlify-cli -g
+          npm run build:prod
 
       - name: Static analysis
         run: |
@@ -56,6 +65,12 @@ jobs:
           npm run lint
           echo "Type checking in progress..."
           npm run check:typings
+
+      - name: Publish
+        run: netlify deploy --dir=build --prod
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
   test:
     name: Test
@@ -216,8 +231,8 @@ jobs:
           name: my-artifact
           path: build
 
-      - name: Publish
-        run: netlify deploy --dir=build --prod
-        env:
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+#      - name: Publish
+#        run: netlify deploy --dir=build --prod
+#        env:
+#          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+#          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
