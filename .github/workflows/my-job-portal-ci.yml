@@ -25,8 +25,6 @@ jobs:
       matrix:
         node-version: [ '16.10.0' ]
     runs-on: ubuntu-latest
-    environment:
-      name: dev
 
     steps:
       - name: Checkout repository
@@ -48,13 +46,6 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
-      - name: Switch directory to workspace
-        run: |
-          echo "Geeting files"
-          pwd
-          ls
-          pwd
-
       - name: Install dependencies
         run: |
           npm ci
@@ -66,14 +57,6 @@ jobs:
           npm run lint
           echo "Type checking in progress..."
           npm run check:typings
-
-      - name: Publish
-        uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-args: "--prod"
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
 
   test:
     name: Test
@@ -184,14 +167,6 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@main
 
-      - name: Switch directory to workspace
-        run: |
-          echo "Geeting files"
-          pwd
-          npm install netlify-cli -g
-          pwd
-
-
       - name: Get artifacts
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
@@ -205,37 +180,10 @@ jobs:
         with:
           args: unzip -qq "my-job-portal-${{ steps.package-version.outputs.current-version }}-${{ github.ref_name }}.${{ github.run_number }}-SNAPSHOT.zip" -d build
 
-
-#      - name: Deploy to Cloud
-#        uses: nwtgck/actions-netlify@v1.2
-#        with:
-#          publish-dir: './build'
-#          deploy-message: "Deploy from GitHub Actions"
-#        env:
-#          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-#          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-#      - uses: jsmrcaga/action-netlify-deploy@master
-#        with:
-#          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-#          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-#          NETLIFY_DEPLOY_MESSAGE: "Prod deploy v${{ github.ref }}"
-#          NETLIFY_DEPLOY_TO_PROD: true
-#          build_command: "npm run build:prod"
-
-#      - name: Deploy draft to Netlify
-#        uses: South-Paw/action-netlify-deploy@v1.2.0
-#        with:
-#          github-token: ${{ secrets.GH_TOKEN }}
-#          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-#          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-#          build-dir: './build'
-      - uses: actions/upload-artifact@v3
+      - name: Publish
+        uses: amondnet/vercel-action@v20
         with:
-          name: my-artifact
-          path: build
-
-#      - name: Publish
-#        run: netlify deploy --dir=build --prod
-#        env:
-#          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-#          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-args: "--prod"
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
