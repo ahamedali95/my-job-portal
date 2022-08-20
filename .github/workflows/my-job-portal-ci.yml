@@ -4,6 +4,7 @@ on:
     branches: [JB-3]
   pull_request:
     branches: [master]
+    types: [opened, closed, reopened]
 
   workflow_dispatch:
     inputs:
@@ -12,12 +13,12 @@ on:
         description: Select an action.
         required: true
         options:
-          - Build
+          - build
           - dev
           - prod
       deployFromArtifactory:
         type: boolean
-        description: Deploy/Release from pre-existing application version from artifactory? Please specify.
+        description: Do you want to deploy/release from pre-existing build version from artifactory? Please specify.
       artifactVersion:
           description: Enter artifact version
 
@@ -28,7 +29,6 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-latest
 
-
     steps:
       - run: echo '${{inputs.deployFromArtifactory}}'
       - run: echo '${{inputs.artifactVersion}}'
@@ -38,8 +38,10 @@ jobs:
         with:
           script: |
             core.setFailed('Deploy from artifactory option is selected but artifact version not provided!')
+
   build:
     name: Build
+    if: inputs.action == 'build' || ${{ github.event_name == 'push' }}
     strategy:
       fail-fast: true
       matrix:
