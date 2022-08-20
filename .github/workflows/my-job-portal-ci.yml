@@ -67,10 +67,11 @@ jobs:
           npm run check:typings
 
       - name: Publish
-        env:
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        run: netlify deploy --dir=build --prod
+      uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "copper-ui"
+          heroku_email: "ahamedali95@gmail.com"
 
   test:
     name: Test
