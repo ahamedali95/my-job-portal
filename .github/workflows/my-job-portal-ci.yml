@@ -33,7 +33,7 @@ jobs:
       - run: echo '${{inputs.deployFromArtifactory}}'
       - run: echo '${{inputs.artifactVersion}}'
       - name: Validate
-        if: inputs.deployFromArtifactory == 'true' && inputs.artifactVersion == ''
+        if: inputs.deployFromArtifactory == 'true'
         uses: actions/github-script@v3
         with:
           script: |
