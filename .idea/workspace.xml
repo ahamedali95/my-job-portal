@@ -29,7 +29,7 @@
         <entry file="file://$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="525">
-              <caret line="35" column="44" lean-forward="true" selection-start-line="35" selection-start-column="44" selection-end-line="35" selection-end-column="44" />
+              <caret line="35" column="79" selection-start-line="35" selection-start-column="79" selection-end-line="35" selection-end-column="79" />
             </state>
           </provider>
         </entry>
@@ -263,12 +263,12 @@
       <workItem from="1659194460778" duration="29694000" />
       <workItem from="1659451555420" duration="48210000" />
       <workItem from="1660274276895" duration="420000" />
-      <workItem from="1661015578627" duration="11565000" />
+      <workItem from="1661015578627" duration="11644000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="92596000" />
+    <option name="totallyTimeSpent" value="92675000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1057" extended-state="6" />
@@ -518,7 +518,7 @@
     <entry file="file://$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
-          <caret line="35" column="44" lean-forward="true" selection-start-line="35" selection-start-column="44" selection-end-line="35" selection-end-column="44" />
+          <caret line="35" column="79" selection-start-line="35" selection-start-column="79" selection-end-line="35" selection-end-column="79" />
         </state>
       </provider>
     </entry>
