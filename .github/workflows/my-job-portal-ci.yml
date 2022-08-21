@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - run: echo '${{inputs.deployFromArtifactory}}'
-      - run: echo '${{inputs.artifactVersion}}'
+      - run: echo '${{inputs.action}}'
       - name: Validate existence of artifact version
         if: (inputs.action == 'dev' || inputs.action == 'prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
         uses: actions/github-script@v3
@@ -41,7 +41,7 @@ jobs:
 
   build:
     name: Build
-    if: inputs.action == 'build' || ${{ github.event_name == 'push' }} || ${{ github.event_name == 'pull_request' }}
+    if: inputs.action == 'build' || ${{ github.event_name }} == 'push' || ${{ github.event_name }} == 'pull_request'
     strategy:
       fail-fast: true
       matrix:
