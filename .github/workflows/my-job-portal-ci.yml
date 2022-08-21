@@ -46,11 +46,11 @@ jobs:
       - uses: rishabhgupta/split-by@v1
         id: split
         with:
-          string: ${{ inputs.action }}
-          split-by: ' '
+          string: 'feat/branch-name'
+          split-by: '/'
       - id: step1
         run: |
-          echo "::set-output name=test::${{ steps.split.outputs._2}}"
+          echo "::set-output name=test::${{ steps.split.outputs._1}}"
 
 
       - name: Validate existence of artifact version if chosen to deploy from artifactory
