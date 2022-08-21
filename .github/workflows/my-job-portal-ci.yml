@@ -47,6 +47,12 @@ jobs:
         with:
           script: |
             core.setFailed('Deploy from artifactory option is selected but artifact version is not provided!')
+      - name: Validate version getting released to Prod
+        if: (inputs.action == 'prod' && inputs.deployFromArtifactory == true && contains(inputs.artifactVersion, 'SNAPSHOT'))
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Attempt to release snashot versions to prod is not allowed!')
 
   build:
     name: Build
@@ -177,7 +183,7 @@ jobs:
           url: ${{ secrets.ARTIFACTORY_URL }}
           credentials type: 'accesstoken'
           access token: ${{ secrets.ARTIFACTORY_TOKEN }}
-          args: upload "copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" "copper-ui-dev-generic-local/" --fail-no-op=true
+          args: upload "copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" "copper-ui-generic-local/" --fail-no-op=true
 
   deploy_to_dev:
     name: Deploy to Dev
@@ -217,7 +223,7 @@ jobs:
           url: ${{ secrets.ARTIFACTORY_URL }}
           credentials type: 'accesstoken'
           access token: ${{ secrets.ARTIFACTORY_TOKEN }}
-          args: download "copper-ui-dev-generic-local/${{ steps.artifact-name.outputs.tag }}" --fail-no-op=true
+          args: download "copper-ui-generic-local/${{ steps.artifact-name.outputs.tag }}" --fail-no-op=true
 
       - name: Uncompress artifacts
         uses: montudor/action-zip@v1
@@ -231,3 +237,56 @@ jobs:
           vercel-args: "--prod"
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+
+    deploy_to_dev:
+      name: Deploy to Prod
+      if: |
+        always() &&
+        needs.init.result == 'success' &&
+        inputs.action == 'prod' &&
+        (needs.publish.result == 'success' || inputs.deployFromArtifactory == true)
+      strategy:
+        fail-fast: true
+      needs: publish
+      runs-on: ubuntu-latest
+      environment:
+        name: ${{ inputs.action }}
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+
+        - name: Get application version
+          id: package-version
+          uses: martinbeentjes/npm-get-version-action@main
+
+        - name: Get artifact name
+          id: artifact-name
+          run: |
+            if ${{ inputs.deployFromArtifactory }} == true; then
+              echo ::set-output name=tag::${{ inputs.artifactVersion }}
+            else
+              echo ::set-output name=tag::"copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip"
+            fi
+          shell: bash
+
+        - name: Get artifacts
+          uses: advancedcsg-open/action-jfrog-cli@master
+          with:
+            url: ${{ secrets.ARTIFACTORY_URL }}
+            credentials type: 'accesstoken'
+            access token: ${{ secrets.ARTIFACTORY_TOKEN }}
+            args: download "copper-ui-generic-local/${{ steps.artifact-name.outputs.tag }}" --fail-no-op=true
+
+        - name: Uncompress artifacts
+          uses: montudor/action-zip@v1
+          with:
+            args: unzip -qq ${{ steps.artifact-name.outputs.tag }}
+
+        - name: Publish to cloud
+          uses: amondnet/vercel-action@v20
+          with:
+            vercel-token: ${{ secrets.VERCEL_TOKEN }}
+            vercel-args: "--prod"
+            vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+            vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
