@@ -33,6 +33,14 @@ jobs:
       - run: echo '${{inputs.deployFromArtifactory}}'
       - run: echo '${{inputs.action}}'
       - run: echo '${{ github.event_name }}'
+      - name: console
+        run: |
+          if (always() && (inputs.action == 'build' || ${{ github.event_name }} == 'push' || ${{ github.event_name }} == 'pull_request')) == true; then
+            echo "true";
+          else
+            echo "false";
+          fi
+        shell: bash
       - name: Validate existence of artifact version
         if: (inputs.action == 'dev' || inputs.action == 'prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
         uses: actions/github-script@v3
