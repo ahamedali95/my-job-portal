@@ -14,8 +14,8 @@ on:
         required: true
         options:
           - build
-          - dev
-          - prod
+          - Deploy to dev
+          - Release to prod
       deployFromArtifactory:
         type: boolean
         description: Do you want to deploy/release from pre-existing build version from artifactory?
@@ -28,6 +28,7 @@ jobs:
     strategy:
       fail-fast: true
     runs-on: ubuntu-latest
+    output1: ${{ steps.step1.outputs.test }}
 
     steps:
       - name: Parameterized build inputs
@@ -40,6 +41,16 @@ jobs:
         run: |
           echo 'Event name: ${{github.event_name}}'
           echo 'Event type: ${{github.event.action}}'
+
+      - uses: rishabhgupta/split-by@v1
+        id: split
+        with:
+          string: ${{ inputs.action }}
+          split-by: ' '
+      - id: step1
+        run: |
+          echo "::set-output name=test::${{ steps.split.outputs._1}}"
+
 
       - name: Validate existence of artifact version if chosen to deploy from artifactory
         if: (inputs.action == 'dev' || inputs.action == 'prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
@@ -260,6 +271,8 @@ jobs:
       name: ${{ inputs.action }}
 
     steps:
+      - run: echo ${{needs.job1.outputs.output1}}
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -297,14 +310,3 @@ jobs:
           vercel-args: "--prod"
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
-
-      - name: Bump version
-        run: npm version patch
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Bump version
-          title: Bump version
-          branch: master
