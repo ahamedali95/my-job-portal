@@ -36,6 +36,11 @@ jobs:
           echo 'DeployFromArtifactory?: ${{inputs.deployFromArtifactory}}'
           echo 'Artifact version: ${{inputs.artifactVersion}}'
 
+      - name: SCM events
+        run: |
+          echo 'Event name: ${{github.event_name}}"
+          echo 'Event type: ${{github.event.action}}"
+
       - name: Validate existence of artifact version if chosen to deploy from artifactory
         if: (inputs.action == 'dev' || inputs.action == 'prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
         uses: actions/github-script@v3
@@ -62,8 +67,6 @@ jobs:
     if: inputs.deployFromArtifactory == false
     strategy:
       fail-fast: true
-      matrix:
-        node-version: [ '16.10.0' ]
     needs: init
     runs-on: ubuntu-latest
 
@@ -73,12 +76,13 @@ jobs:
 
       - name: Commit History
         run: |
+          echo 'Event type: ${{github.ref_name}}"
           git log --pretty=format:"%h %ad%x09%an%x09%s" --date=short --first-parent "${{ github.ref_name }}"  | head -20
 
       - name: Download binary
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '16.10.0'
 
       - name: Cache node_modules
         id: cache-node-modules
