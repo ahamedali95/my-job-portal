@@ -254,7 +254,7 @@ jobs:
       (needs.publish.result == 'success' || inputs.deployFromArtifactory == true)
     strategy:
       fail-fast: true
-    needs: publish
+    needs: deploy_to_dev
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.action }}
