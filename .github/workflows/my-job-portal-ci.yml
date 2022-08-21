@@ -14,8 +14,8 @@ on:
         required: true
         options:
           - build
-          - Deploy to dev
-          - Release to prod
+          - deploy-to-dev
+          - release-to-prod
       deployFromArtifactory:
         type: boolean
         description: Do you want to deploy/release from pre-existing build version from artifactory?
@@ -46,11 +46,11 @@ jobs:
       - uses: rishabhgupta/split-by@v1
         id: split
         with:
-          string: 'feat/branch-name'
-          split-by: '/'
+          string: ${{ inputs.action }}
+          split-by: '-'
       - id: step1
         run: |
-          echo "::set-output name=test::${{ steps.split.outputs._1}}"
+          echo "::set-output name=test::${{ steps.split.outputs._2}}"
 
 
       - name: Validate existence of artifact version if chosen to deploy from artifactory
