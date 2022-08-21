@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo ${{needs.init.outputs.ename}}
+      - run: echo ${{needs.init.outputs.output1}}
       - name: Checkout repository
         uses: actions/checkout@v3
 
