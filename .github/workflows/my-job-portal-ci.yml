@@ -55,21 +55,21 @@ jobs:
           echo "::set-output name=ename::${{ steps.split.outputs._2}}"
 
       - name: Validate existence of artifact version if chosen to deploy from artifactory
-        if: (inputs.action == 'dev' || inputs.action == 'prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
+        if: (inputs.action == 'deploy-to-dev' || inputs.action == 'deploy-to-prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
         uses: actions/github-script@v3
         with:
           script: |
             core.setFailed('Deploy from artifactory option is selected but artifact version is not provided!')
 
       - name: Validate version getting released to Prod if chosen to deploy from artifactory
-        if: (inputs.action == 'prod' && inputs.deployFromArtifactory == true && contains(inputs.artifactVersion, 'SNAPSHOT'))
+        if: (inputs.action == 'deploy-to-prod' && inputs.deployFromArtifactory == true && contains(inputs.artifactVersion, 'SNAPSHOT'))
         uses: actions/github-script@v3
         with:
           script: |
             core.setFailed('Attempt to release snapshot versions to prod is not allowed!')
 
       - name: Validate branch getting released to Prod
-        if: (inputs.action == 'prod' && inputs.deployFromArtifactory == false && startsWith(github.ref_name, 'release/') == false)
+        if: (inputs.action == 'deploy-to-prod' && inputs.deployFromArtifactory == false && startsWith(github.ref_name, 'release/') == false)
         uses: actions/github-script@v3
         with:
           script: |
@@ -164,7 +164,7 @@ jobs:
 
   publish:
     name: Publish Artifacts
-    if: inputs.action == 'build' || inputs.action == 'dev' || inputs.action == 'prod'
+    if: inputs.action == 'build' || inputs.action == 'deploy-to-dev' || inputs.action == 'deploy-to-prod'
     strategy:
       fail-fast: true
     needs: security
@@ -208,7 +208,7 @@ jobs:
     if: |
       always() &&
       needs.init.result == 'success' &&
-      inputs.action == 'dev' &&
+      inputs.action == 'deploy-to-dev' &&
       (needs.publish.result == 'success' || inputs.deployFromArtifactory == true)
     strategy:
       fail-fast: true
@@ -261,7 +261,7 @@ jobs:
     if: |
       always() &&
       needs.init.result == 'success' &&
-      inputs.action == 'prod' &&
+      inputs.action == 'deploy-to-prod' &&
       (needs.publish.result == 'success' || inputs.deployFromArtifactory == true)
     strategy:
       fail-fast: true
