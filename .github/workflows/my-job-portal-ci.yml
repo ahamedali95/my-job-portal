@@ -33,7 +33,7 @@ jobs:
       - run: echo '${{inputs.deployFromArtifactory}}'
       - run: echo '${{inputs.action}}'
       - run: echo '${{ github.event_name }}'
-      - run: echo (startsWith(${{ github.ref_name }}, 'release/'))
+      - run: echo '(!startsWith(${{ github.ref_name }}, 'release/'))'
       - run: inputs.action == 'prod'
       - name: console
         run: |
