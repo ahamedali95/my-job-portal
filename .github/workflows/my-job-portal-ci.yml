@@ -29,7 +29,7 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-latest
     outputs:
-      env: ${{ steps.env.outputs.ename }}
+      output1: ${{ steps.env.outputs.ename }}
 
     steps:
       - name: Parameterized build inputs
@@ -215,7 +215,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     environment:
-      name: ${{needs.init.outputs.env}}
+      name: ${{needs.init.outputs.output1}}
 
     steps:
       - name: Checkout repository
@@ -268,7 +268,7 @@ jobs:
     needs: deploy_to_dev
     runs-on: ubuntu-latest
     environment:
-      name: ${{needs.init.outputs.env}}
+      name: ${{needs.init.outputs.output1}}
 
     steps:
       - name: Checkout repository
