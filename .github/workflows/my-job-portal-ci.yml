@@ -50,7 +50,7 @@ jobs:
           split-by: ' '
       - id: step1
         run: |
-          echo "::set-output name=test::${{ steps.split.outputs._1}}"
+          echo "::set-output name=test::${{ steps.split.outputs._2}}"
 
 
       - name: Validate existence of artifact version if chosen to deploy from artifactory
