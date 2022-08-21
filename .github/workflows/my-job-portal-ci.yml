@@ -33,6 +33,8 @@ jobs:
       - run: echo '${{inputs.deployFromArtifactory}}'
       - run: echo '${{inputs.action}}'
       - run: echo '${{ github.event_name }}'
+      - run: echo !startsWith(${{ github.ref_name }}, 'release/')
+      - run: inputs.action == 'prod'
       - name: console
         run: |
           if ((inputs.action == 'build' || ${{ github.event_name }} == 'push' || ${{ github.event_name }} == 'pull_request')); then
@@ -48,7 +50,7 @@ jobs:
           script: |
             core.setFailed('Deploy from artifactory option is selected but artifact version is not provided!')
 
-      - name: Validate version getting released to Prod
+      - name: Validate version getting released to Prod if chosen to deploy from artifactory
         if: (inputs.action == 'prod' && inputs.deployFromArtifactory == true && contains(inputs.artifactVersion, 'SNAPSHOT'))
         uses: actions/github-script@v3
         with:
