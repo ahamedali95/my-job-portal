@@ -175,7 +175,7 @@ jobs:
   deploy_to_dev:
     name: Deploy to Dev
     if: |
-      (always() &&
+      always() &&
       needs.init.result == 'success' &&
       ((inputs.action == 'dev' && needs.publish.result == 'success') ||
       (inputs.action == 'dev' && inputs.deployFromArtifactory == true))
