@@ -29,7 +29,7 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.step1.outputs.test }}
+      output1: ${{ steps.ename.outputs.ename }}
 
     steps:
       - name: Parameterized build inputs
@@ -43,14 +43,16 @@ jobs:
           echo 'Event name: ${{github.event_name}}'
           echo 'Event type: ${{github.event.action}}'
 
+      - name: Get environment name
       - uses: rishabhgupta/split-by@v1
         id: split
         with:
           string: ${{ inputs.action }}
           split-by: '-'
-      - id: step1
+
+      - id: ename
         run: |
-          echo "::set-output name=test::${{ steps.split.outputs._2}}"
+          echo "::set-output name=ename::${{ steps.split.outputs._2}}"
 
 
       - name: Validate existence of artifact version if chosen to deploy from artifactory
@@ -83,7 +85,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo ${{needs.init.outputs.output1}}
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -146,8 +147,6 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment:
-      name: dev
 
     steps:
       - name: Checkout repository
@@ -217,7 +216,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     environment:
-      name: ${{ inputs.action }}
+      name: ${{needs.init.outputs.ename}}
 
     steps:
       - name: Checkout repository
@@ -270,7 +269,7 @@ jobs:
     needs: deploy_to_dev
     runs-on: ubuntu-latest
     environment:
-      name: ${{ inputs.action }}
+      name: ${{needs.init.outputs.ename}}
 
     steps:
       - name: Checkout repository
