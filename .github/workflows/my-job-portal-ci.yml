@@ -38,8 +38,8 @@ jobs:
 
       - name: SCM events
         run: |
-          echo 'Event name: ${{github.event_name}}"
-          echo 'Event type: ${{github.event.action}}"
+          echo 'Event name: ${{github.event_name}}'
+          echo 'Event type: ${{github.event.action}}'
 
       - name: Validate existence of artifact version if chosen to deploy from artifactory
         if: (inputs.action == 'dev' || inputs.action == 'prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
