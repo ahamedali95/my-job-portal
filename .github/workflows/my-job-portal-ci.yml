@@ -33,6 +33,7 @@ jobs:
       - run: echo '${{inputs.deployFromArtifactory}}'
       - run: echo '${{inputs.action}}'
       - run: echo '${{ github.event_name }}'
+      - run: echo '${{ github.ref_name }}'
 #      - run:  |
 #          if startsWith(${{ github.ref_name }}, 'release/') == true; then
 #            echo 'true';
@@ -65,7 +66,7 @@ jobs:
             core.setFailed('Attempt to release snapshot versions to prod is not allowed!')
 
       - name: Validate branch getting released to Prod
-        if: (inputs.action == 'prod' && contains(${{ github.ref_name }}, 'release/'))
+        if: (inputs.action == 'prod' && contains(${{ github.ref_name }}, 'release'))
         uses: actions/github-script@v3
         with:
           script: |
