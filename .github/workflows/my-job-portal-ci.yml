@@ -84,7 +84,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo ${{needs.init.outputs.output1}}
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -216,7 +215,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     environment:
-      name: ${{needs.init.outputs.ename}}
+      name: ${{needs.init.outputs.output1}}
 
     steps:
       - name: Checkout repository
@@ -269,7 +268,7 @@ jobs:
     needs: deploy_to_dev
     runs-on: ubuntu-latest
     environment:
-      name: ${{needs.init.outputs.ename}}
+      name: ${{needs.init.outputs.output1}}
 
     steps:
       - name: Checkout repository
