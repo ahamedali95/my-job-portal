@@ -176,7 +176,7 @@ jobs:
     name: Deploy to Dev
     if: |
       always() &&
-      ((inputs.action == 'dev' && needs.publish.result == 'success') || (inputs.action == 'dev' && deployFromArtifactory == true))
+      ((inputs.action == 'dev' && needs.publish.result == 'success') || (inputs.action == 'dev' && inputs.deployFromArtifactory == true))
     strategy:
       fail-fast: true
     runs-on: ubuntu-latest
