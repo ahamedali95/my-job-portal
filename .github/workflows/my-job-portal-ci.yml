@@ -204,6 +204,11 @@ jobs:
           fi
         shell: bash
 
+      - name: xxxxxx
+        run: |
+          echo ${{ steps.artifact-name.outputs.tag }}
+        shell: bash
+
       - name: Get artifacts
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
