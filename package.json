@@ -1,11 +1,11 @@
 {
   "name": "my-job-portal",
-  "version": "1.0.0",
+  "version": "1.0.0-SNAPSHOT",
   "description": "",
   "main": "build/index.html",
   "engines": {
-    "node": ">=16.x",
-    "npm": ">=7.x"
+    "node": "16.10.0",
+    "npm": "7.24.0"
   },
   "scripts": {
     "check:typings": "tsc",
@@ -73,6 +73,7 @@
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
     "mini-css-extract-plugin": "^2.6.1",
+    "path": "^0.12.7",
     "sass-loader": "^13.0.2",
     "terser-webpack-plugin": "^5.3.3",
     "typescript": "^4.7.4",

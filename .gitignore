@@ -32,3 +32,6 @@ coverage
 
 # docs
 docs
+# Local Netlify folder
+.netlify
+.vercel

@@ -1,27 +1,100 @@
 name: my-job-portal-ui
 on:
+#  push:
+#    branches: '**'
   pull_request:
-    branches: [master]
+    branches: [release/*, master]
+    types: [opened, closed, reopened]
 
   workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        description: Select an action.
+        required: true
+        options:
+          - build
+          - dev
+          - prod
+      deployFromArtifactory:
+        type: boolean
+        description: Do you want to deploy/release from pre-existing build version from artifactory?
+      artifactVersion:
+          description: Enter artifact version
 
 jobs:
-  build:
-    name: Build
+  init:
+    name: Init
     strategy:
       fail-fast: true
-      matrix:
-        node-version: [ '16.10.0' ]
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
+    runs-on: ubuntu-latest
 
-      - uses: actions/setup-node@v3
+    steps:
+      - name: Parameterized build inputs
+        run: |
+          echo 'Action: ${{inputs.action}}'
+          echo 'DeployFromArtifactory?: ${{inputs.deployFromArtifactory}}'
+          echo 'Artifact version: ${{inputs.artifactVersion}}'
+
+      - name: SCM events
+        run: |
+          echo 'Event name: ${{github.event_name}}'
+          echo 'Event type: ${{github.event.action}}'
+
+      - name: Validate existence of artifact version if chosen to deploy from artifactory
+        if: (inputs.action == 'dev' || inputs.action == 'prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Deploy from artifactory option is selected but artifact version is not provided!')
+
+      - name: Validate version getting released to Prod if chosen to deploy from artifactory
+        if: (inputs.action == 'prod' && inputs.deployFromArtifactory == true && contains(inputs.artifactVersion, 'SNAPSHOT'))
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Attempt to release snapshot versions to prod is not allowed!')
+
+      - name: Validate branch getting released to Prod
+        if: (inputs.action == 'prod' && startsWith(github.ref_name, 'release/') == false)
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Attempt to release any non-release branches to prod is not allowed!')
+
+  build:
+    name: Build
+    if: inputs.deployFromArtifactory == false
+    strategy:
+      fail-fast: true
+    needs: init
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Commit History
+        run: |
+          echo 'Event type: ${{github.ref_name}}'
+          git log --pretty=format:"%h %ad%x09%an%x09%s" --date=short --first-parent "${{ github.ref_name }}"  | head -20
+
+      - name: Download binary
+        uses: actions/setup-node@v3
         with:
           node-version: '16.10.0'
 
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npm run build:prod
 
       - name: Static analysis
         run: |
@@ -30,18 +103,197 @@ jobs:
           echo "Type checking in progress..."
           npm run check:typings
 
-      - name: Webpack Build
+  test:
+    name: Test
+    strategy:
+      fail-fast: true
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Restore node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Unit Tests
+        run: |
+          echo "Unit Tests are running..."
+#          npm run test
+
+  security:
+    name: Vulnerability Scan
+    strategy:
+      fail-fast: true
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: dev
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: SAST Scan
+        uses: ShiftLeftSecurity/scan-action@master
+        with:
+          type: 'nodejs'
+
+      - name: SCA scan
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  publish:
+    name: Publish Artifacts
+    if: inputs.action == 'build' || inputs.action == 'dev' || inputs.action == 'prod'
+    strategy:
+      fail-fast: true
+    needs: security
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Restore node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Get application version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
+      - name: Create artifacts
         run: |
           echo "Running production build..."
           npm run build:prod
 
-  test:
-    name: Test
-    needs: build
-    runs-on: macos-latest
+      - name: Compress artifacts
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r "copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" build
+
+      - name: Publish to artifactory
+        uses: advancedcsg-open/action-jfrog-cli@master
+        with:
+          url: ${{ secrets.ARTIFACTORY_URL }}
+          credentials type: 'accesstoken'
+          access token: ${{ secrets.ARTIFACTORY_TOKEN }}
+          args: upload "copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" "copper-ui-generic-local/" --fail-no-op=true
+
+  deploy_to_dev:
+    name: Deploy to Dev
+    if: |
+      always() &&
+      needs.init.result == 'success' &&
+      inputs.action == 'dev' &&
+      (needs.publish.result == 'success' || inputs.deployFromArtifactory == true)
+    strategy:
+      fail-fast: true
+    needs: publish
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.action }}
+
     steps:
-      - name: Unit Test
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get application version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
+      - name: Get artifact name
+        id: artifact-name
         run: |
-          echo "Unit Tests are running..."
+          if ${{ inputs.deployFromArtifactory }} == true; then
+            echo ::set-output name=tag::${{ inputs.artifactVersion }}
+          else
+            echo ::set-output name=tag::"copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip"
+          fi
+        shell: bash
 
+      - name: Get artifacts
+        uses: advancedcsg-open/action-jfrog-cli@master
+        with:
+          url: ${{ secrets.ARTIFACTORY_URL }}
+          credentials type: 'accesstoken'
+          access token: ${{ secrets.ARTIFACTORY_TOKEN }}
+          args: download "copper-ui-generic-local/${{ steps.artifact-name.outputs.tag }}" --fail-no-op=true
 
+      - name: Uncompress artifacts
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq ${{ steps.artifact-name.outputs.tag }}
+
+      - name: Publish to cloud
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-args: "--prod"
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+
+  deploy_to_prod:
+    name: Deploy to Prod
+    if: |
+      always() &&
+      needs.init.result == 'success' &&
+      inputs.action == 'prod' &&
+      (needs.publish.result == 'success' || inputs.deployFromArtifactory == true)
+    strategy:
+      fail-fast: true
+    needs: deploy_to_dev
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.action }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get application version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
+      - name: Get artifact name
+        id: artifact-name
+        run: |
+          if ${{ inputs.deployFromArtifactory }} == true; then
+            echo ::set-output name=tag::${{ inputs.artifactVersion }}
+          else
+            echo ::set-output name=tag::"copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip"
+          fi
+        shell: bash
+
+      - name: Get artifacts
+        uses: advancedcsg-open/action-jfrog-cli@master
+        with:
+          url: ${{ secrets.ARTIFACTORY_URL }}
+          credentials type: 'accesstoken'
+          access token: ${{ secrets.ARTIFACTORY_TOKEN }}
+          args: download "copper-ui-generic-local/${{ steps.artifact-name.outputs.tag }}" --fail-no-op=true
+
+      - name: Uncompress artifacts
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq ${{ steps.artifact-name.outputs.tag }}
+
+      - name: Publish to cloud
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-args: "--prod"
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
