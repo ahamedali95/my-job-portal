@@ -56,7 +56,7 @@ jobs:
             core.setFailed('Attempt to release snapshot versions to prod is not allowed!')
 
       - name: Validate branch getting released to Prod
-        if: (inputs.action == 'prod' && startsWith(github.ref_name, 'release/') == false)
+        if: (inputs.action == 'prod' && inputs.deployFromArtifactory == false && startsWith(github.ref_name, 'release/') == false)
         uses: actions/github-script@v3
         with:
           script: |
