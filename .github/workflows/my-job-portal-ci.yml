@@ -271,7 +271,7 @@ jobs:
       name: ${{ inputs.action }}
 
     steps:
-      - run: echo ${{needs.job1.outputs.output1}}
+      - run: echo ${{needs.init.outputs.output1}}
 
       - name: Checkout repository
         uses: actions/checkout@v3
