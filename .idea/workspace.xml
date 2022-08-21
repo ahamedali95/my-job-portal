@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="017e1122-4de1-4eba-ad2a-2504810bef78" name="Default Changelist" comment="" />
+    <list default="true" id="017e1122-4de1-4eba-ad2a-2504810bef78" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -296,12 +298,12 @@
       <workItem from="1659194460778" duration="29694000" />
       <workItem from="1659451555420" duration="48210000" />
       <workItem from="1660274276895" duration="420000" />
-      <workItem from="1661015578627" duration="31010000" />
+      <workItem from="1661015578627" duration="31205000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="112041000" />
+    <option name="totallyTimeSpent" value="112236000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1057" extended-state="6" />
