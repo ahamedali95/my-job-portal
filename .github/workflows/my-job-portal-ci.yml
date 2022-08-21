@@ -143,7 +143,7 @@ jobs:
     if: inputs.action == 'build' || inputs.action == 'dev' || (inputs.action == 'prod' && contains(github.ref_name, 'release/'))
     strategy:
       fail-fast: true
-    needs: build
+    needs: security
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.action }}
@@ -190,7 +190,7 @@ jobs:
       (needs.publish.result == 'success' || inputs.deployFromArtifactory == true)
     strategy:
       fail-fast: true
-    needs: [publish]
+    needs: publish
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.action }}
@@ -213,13 +213,6 @@ jobs:
           fi
         shell: bash
 
-      - name: xxxxxx
-        run: |
-          pwd
-          ls
-          echo ${{ steps.artifact-name.outputs.tag }}
-        shell: bash
-
       - name: Get artifacts
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
@@ -232,12 +225,6 @@ jobs:
         uses: montudor/action-zip@v1
         with:
           args: unzip -qq ${{ steps.artifact-name.outputs.tag }}
-
-      - name: xxxxxx
-        run: |
-          pwd
-          ls
-        shell: bash
 
       - name: Publish
         uses: amondnet/vercel-action@v20
