@@ -217,10 +217,10 @@ jobs:
           access token: ${{ secrets.JFROG_TOKEN }}
           args: download ${{ steps.artifact-name.outputs.tag }} --fail-no-op=true
 
-      - name: Uncompress artifacts
-        uses: montudor/action-zip@v1
-        with:
-          args: unzip -qq ${{ steps.artifact-name.outputs.tag }} -d build
+#      - name: Uncompress artifacts
+#        uses: montudor/action-zip@v1
+#        with:
+#          args: unzip -qq ${{ steps.artifact-name.outputs.tag }} -d build
 
       - name: Publish
         uses: amondnet/vercel-action@v20
