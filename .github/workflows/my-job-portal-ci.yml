@@ -145,8 +145,6 @@ jobs:
       fail-fast: true
     needs: security
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.action }}
 
     steps:
       - name: Checkout repository
@@ -171,7 +169,7 @@ jobs:
       - name: Compress artifacts
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r "copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip" build
+          args: zip -qq -r "copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" build
 
       - name: Publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
@@ -179,7 +177,7 @@ jobs:
           url: ${{ secrets.ARTIFACTORY_URL }}
           credentials type: 'accesstoken'
           access token: ${{ secrets.ARTIFACTORY_TOKEN }}
-          args: upload "copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip" "copper-ui-dev-generic-local/" --fail-no-op=true
+          args: upload "copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip" "copper-ui-dev-generic-local/" --fail-no-op=true
 
   deploy_to_dev:
     name: Deploy to Dev
@@ -209,7 +207,7 @@ jobs:
           if ${{ inputs.deployFromArtifactory }} == true; then
             echo ::set-output name=tag::${{ inputs.artifactVersion }}
           else
-            echo ::set-output name=tag::"copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip"
+            echo ::set-output name=tag::"copper-ui-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}.zip"
           fi
         shell: bash
 
