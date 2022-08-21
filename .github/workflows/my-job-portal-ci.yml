@@ -177,8 +177,8 @@ jobs:
     if: |
       always() &&
       needs.init.result == 'success' &&
-      ((inputs.action == 'dev' && needs.publish.result == 'success') ||
-      (inputs.action == 'dev' && inputs.deployFromArtifactory == true))
+      inputs.action == 'dev' &&
+      (needs.publish.result == 'success' || inputs.deployFromArtifactory == true)
     strategy:
       fail-fast: true
     needs: [publish]
@@ -194,18 +194,28 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@main
 
+      - name: Get artifact name
+        id: artifact-name
+        run: |
+          if ${{ inputs.deployFromArtifactory }} == true; then
+            echo ::set-output name=tag::${{ inputs.artifactVersion }}
+          else
+            echo ::set-output name=tag::"my-job-portal-fe-generic-local/my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip"
+          fi
+        shell: bash
+
       - name: Get artifacts
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
           url: ${{ secrets.ARTIFACTORY_URL }}
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: download "my-job-portal-fe-generic-local/my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip" --fail-no-op=true
+          args: download ${{ steps.artifact-name.outputs.tag }} --fail-no-op=true
 
       - name: Uncompress artifacts
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq "my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip" -d build
+          args: unzip -qq ${{ steps.artifact-name.outputs.tag }} -d build
 
       - name: Publish
         uses: amondnet/vercel-action@v20
