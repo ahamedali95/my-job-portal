@@ -28,8 +28,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="178" column="106" selection-start-line="178" selection-start-column="106" selection-end-line="178" selection-end-column="106" />
+            <state relative-caret-position="612">
+              <caret line="181" column="19" selection-start-line="181" selection-start-column="19" selection-end-line="181" selection-end-column="19" />
               <folding>
                 <element signature="e#1113#2262#0" />
                 <element signature="e#1842#2313#0" />
@@ -271,12 +271,12 @@
       <workItem from="1659194460778" duration="29694000" />
       <workItem from="1659451555420" duration="48210000" />
       <workItem from="1660274276895" duration="420000" />
-      <workItem from="1661015578627" duration="14655000" />
+      <workItem from="1661015578627" duration="14747000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="95686000" />
+    <option name="totallyTimeSpent" value="95778000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1057" extended-state="6" />
@@ -525,8 +525,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.github/workflows/my-job-portal-ci.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="178" column="106" selection-start-line="178" selection-start-column="106" selection-end-line="178" selection-end-column="106" />
+        <state relative-caret-position="612">
+          <caret line="181" column="19" selection-start-line="181" selection-start-column="19" selection-end-line="181" selection-end-column="19" />
           <folding>
             <element signature="e#1113#2262#0" />
             <element signature="e#1842#2313#0" />
