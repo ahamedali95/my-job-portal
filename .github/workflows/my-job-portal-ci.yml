@@ -200,7 +200,7 @@ jobs:
           if ${{ inputs.deployFromArtifactory }} == true; then
             echo ::set-output name=tag::${{ inputs.artifactVersion }}
           else
-            echo ::set-output name=tag::"my-job-portal-fe-generic-local/my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip"
+            echo ::set-output name=tag::"my-job-portal-${{ steps.package-version.outputs.current-version }}.${{ github.run_number }}-SNAPSHOT.zip"
           fi
         shell: bash
 
@@ -217,12 +217,18 @@ jobs:
           url: ${{ secrets.ARTIFACTORY_URL }}
           credentials type: 'accesstoken'
           access token: ${{ secrets.JFROG_TOKEN }}
-          args: download ${{ steps.artifact-name.outputs.tag }} --fail-no-op=true
+          args: download "my-job-portal-fe-generic-local/${{ steps.artifact-name.outputs.tag }}" --fail-no-op=true
 
-#      - name: Uncompress artifacts
-#        uses: montudor/action-zip@v1
-#        with:
-#          args: unzip -qq ${{ steps.artifact-name.outputs.tag }} -d build
+      - name: Uncompress artifacts
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq ${{ steps.artifact-name.outputs.tag }}
+
+      - name: xxxxxx
+        run: |
+          pwd
+          ls
+        shell: bash
 
       - name: Publish
         uses: amondnet/vercel-action@v20
