@@ -29,7 +29,7 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.ename.outputs.ename }}
+      env: ${{ steps.env.outputs.ename }}
 
     steps:
       - name: Parameterized build inputs
@@ -50,7 +50,7 @@ jobs:
           string: ${{ inputs.action }}
           split-by: '-'
 
-      - id: ename
+      - id: env
         run: |
           echo "::set-output name=ename::${{ steps.split.outputs._2}}"
 
@@ -215,7 +215,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     environment:
-      name: ${{needs.init.outputs.output1}}
+      name: ${{needs.init.outputs.env}}
 
     steps:
       - name: Checkout repository
@@ -268,7 +268,7 @@ jobs:
     needs: deploy_to_dev
     runs-on: ubuntu-latest
     environment:
-      name: ${{needs.init.outputs.output1}}
+      name: ${{needs.init.outputs.env}}
 
     steps:
       - name: Checkout repository
