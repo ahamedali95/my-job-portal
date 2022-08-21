@@ -50,9 +50,7 @@ jobs:
 
   build:
     name: Build
-    if: |
-      always() &&
-      (inputs.action == 'build' || ${{ github.event_name }} == 'push' || ${{ github.event_name }} == 'pull_request')
+    if: inputs.deployFromArtifactory == false
     strategy:
       fail-fast: true
       matrix:
