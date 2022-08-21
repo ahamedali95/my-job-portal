@@ -18,7 +18,7 @@ on:
           - prod
       deployFromArtifactory:
         type: boolean
-        description: Do you want to deploy/release from pre-existing build version from artifactory? Please specify.
+        description: Do you want to deploy/release from pre-existing build version from artifactory?
       artifactVersion:
           description: Enter artifact version
 
@@ -174,10 +174,10 @@ jobs:
 
   deploy_to_dev:
     name: Deploy to Dev
-    if: inputs.action == 'dev'
+    if: |
+      (always() && inputs.action == 'dev') || (needs.publish.result === 'success')
     strategy:
       fail-fast: true
-    needs: publish
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.action }}
