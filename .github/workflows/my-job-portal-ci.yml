@@ -32,6 +32,7 @@ jobs:
     steps:
       - run: echo '${{inputs.deployFromArtifactory}}'
       - run: echo '${{inputs.action}}'
+      - run: echo '${{ github.event_name }}'
       - name: Validate existence of artifact version
         if: (inputs.action == 'dev' || inputs.action == 'prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
         uses: actions/github-script@v3
