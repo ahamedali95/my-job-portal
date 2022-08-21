@@ -47,8 +47,16 @@ jobs:
         with:
           script: |
             core.setFailed('Deploy from artifactory option is selected but artifact version is not provided!')
+
       - name: Validate version getting released to Prod
         if: (inputs.action == 'prod' && inputs.deployFromArtifactory == true && contains(inputs.artifactVersion, 'SNAPSHOT'))
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Attempt to release snashot versions to prod is not allowed!')
+
+      - name: Validate branch getting released to Prod
+        if: (inputs.action == 'prod' && !startsWith(${{ github.ref_name }}, 'release/'))
         uses: actions/github-script@v3
         with:
           script: |
