@@ -44,7 +44,7 @@ jobs:
           echo 'Event type: ${{github.event.action}}'
 
       - name: Get environment name
-      - uses: rishabhgupta/split-by@v1
+        uses: rishabhgupta/split-by@v1
         id: split
         with:
           string: ${{ inputs.action }}
@@ -53,7 +53,6 @@ jobs:
       - id: ename
         run: |
           echo "::set-output name=ename::${{ steps.split.outputs._2}}"
-
 
       - name: Validate existence of artifact version if chosen to deploy from artifactory
         if: (inputs.action == 'dev' || inputs.action == 'prod') && (inputs.deployFromArtifactory == true && inputs.artifactVersion == '')
