@@ -175,11 +175,12 @@ jobs:
   deploy_to_dev:
     name: Deploy to Dev
     if: |
-      always() &&
-      ((inputs.action == 'dev' && needs.publish.result == 'success') || (inputs.action == 'dev' && inputs.deployFromArtifactory == true))
+      (always() && needs.init.result == 'success')
+      ((inputs.action == 'dev' && needs.publish.result == 'success') ||
+      (inputs.action == 'dev' && inputs.deployFromArtifactory == true))
     strategy:
       fail-fast: true
-    needs: [init, publish]
+    needs: [publish]
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.action }}
